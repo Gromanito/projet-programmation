@@ -20,6 +20,11 @@ ctk.set_appearance_mode("System")  # Modes: system (default), light, dark
 ctk.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
 
 
+try:
+	os.mkdir("images") # le dossier n'existe pas
+except OSError as error: 
+	os.mkdir("images") 
+
 
 class FenetrePrincipale(ctk.CTk):
 	def __init__(self):
