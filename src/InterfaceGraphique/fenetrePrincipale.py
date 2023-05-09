@@ -7,12 +7,13 @@ from PIL import Image, ImageTk
 from ultralytics import YOLO
 import os
 
-from TraitementImage import appliquerBinarisationParDefaut
 from widgetUtiles import *
 from fenetrePhoto import FenetrePhoto
 from fenetreModifPhoto import FenetreModifPhoto
 from segmentation import segmentation
 from TraitementImage import *
+import FrameTraitementImage
+
 
 
 
@@ -23,7 +24,7 @@ ctk.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
 try:
 	os.mkdir("images") # le dossier n'existe pas
 except OSError as error: 
-	os.mkdir("images") 
+	pass 
 
 
 class FenetrePrincipale(ctk.CTk):
@@ -86,7 +87,10 @@ class FenetrePrincipale(ctk.CTk):
 		
 		imgAppPhoto = cv2.imread("images/imageOriginale.png")
 		cv2.imwrite("images/imageModif.png", imgAppPhoto)
-		cv2.imwrite("images/imageBin.png", appliquerBinarisationParDefaut(imgAppPhoto))
+		angleOpti, imageBinDefaut = appliquerBinarisationParDefaut(imgAppPhoto)
+		cv2.imwrite("images/imageBinDefaut.png", imageBinDefaut)
+		cv2.imwrite("images/imageBin.png", imageBinDefaut)
+		FrameTraitementImage.angleOpti = angleOpti
 
 
 		self.labelRenduPourYolo.actualiserImage(cv2.imread("images/imageBin.png"))
@@ -107,6 +111,7 @@ class FenetrePrincipale(ctk.CTk):
 	
 
 	def analyse(self):
+		self.destroyWidget(self.frameTexteReconnu)
 
 		cheminCWD = os.getcwd() # yolo comprend pas les chemins relatifs ...
 

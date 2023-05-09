@@ -19,18 +19,23 @@ class FrameTraitementImage(ctk.CTkFrame):
 	"SEUIL_BASIQUE" : 0,
 	"SEUIL_ADAPTATIF" : 1,
 	"SEUIL_ADAPTATIF_GAUSSIEN" : 2,
+	"SEUIL_SAUVOLA": 3,
+	"DEFAUT" : 4,
 	"0" : "SEUIL_BASIQUE" ,
 	"1" : "SEUIL_ADAPTATIF",
 	"2" : "SEUIL_ADAPTATIF_GAUSSIEN",
+	"3" : "SEUIL_SAUVOLA",
+	"4" : "DEFAUT"
 	}
 
 	cheminImageModif="images/imageModif.png"
 	cheminImageBin="images/imageBin.png"
 
-	paramTypeBinarisation = 0
+	paramTypeBinarisation = 4
 	paramSeuil = 128
 	enleverFond = False
 	conserverBoundingBox = False
+	angleOpti = 0
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
@@ -40,12 +45,11 @@ class FrameTraitementImage(ctk.CTkFrame):
 		self.typeBinarisation = FrameTraitementImage.paramTypeBinarisation
 		self.seuilBin = FrameTraitementImage.paramSeuil
 		self.angleRotation = 0
-		self.rognage = [0,0,1000,1000]
 
 		self.imageModif = cv2.imread(FrameTraitementImage.cheminImageModif)
-		self.imageModifPourRotation = self.imageModif
-		self.imageBin = binarisation(self.imageModif, self.typeBinarisation, self.seuilBin)
 
+
+		
 
 		self.frameDuBas = ctk.CTkFrame(self) #contiendra les 3 compartiments pour rogner, pivoter et choisir la binarisation
 		self.frameDuBas.grid(row=1, column=0, columnspan=2)
@@ -76,11 +80,13 @@ class FrameTraitementImage(ctk.CTkFrame):
 		self.labelPhotoBin = LabelPhoto(frameDroite)
 		self.labelPhotoBin.grid(row=0, column=0, padx=20, pady=20)
 
-		self.actualiserImage()
 
 		labelRenduPourYolo = ctk.CTkLabel(frameDroite, text="Rendu binaire (utilisé pour YOLO)", font=("font1", 14))
 		labelRenduPourYolo.grid(row=1, column=0)
 
+
+
+		
 
 
 		
@@ -89,6 +95,17 @@ class FrameTraitementImage(ctk.CTkFrame):
 		self.spinbox = Spinbox(frameRotation, min=-180, max=180, command=self.rotation)
 		self.spinbox.grid(row=0, padx=50, pady=30)
 		self.spinbox.set(0)
+
+
+		if self.typeBinarisation == 4:
+			FrameTraitementImage.conserverBoundingBox = True
+			self.angleRotation = FrameTraitementImage.angleOpti
+			self.spinbox.set(self.angleRotation)
+			self.imageModif = rotation(self.imageModif, self.angleRotation, True)
+			cv2.imwrite(FrameTraitementImage.cheminImageModif , self.imageModif)
+
+
+
 
 		self.buttonBoundingBox = ctk.CTkRadioButton(frameRotation, text="Conserver Toute\nL'image", value=0 ,font=("font1", 18), command=self.rotaBoundBox)
 		if FrameTraitementImage.conserverBoundingBox == True:
@@ -100,7 +117,7 @@ class FrameTraitementImage(ctk.CTkFrame):
 
 		#----------  Création compartiment binarisation -----
 
-		self.choixTypeBin = ctk.CTkComboBox(frameBinarisation, values=["SEUIL_BASIQUE","SEUIL_ADAPTATIF","SEUIL_ADAPTATIF_GAUSSIEN"], font=("font1", 18), dropdown_font=("font1", 22), command=self.changeTypeBin)
+		self.choixTypeBin = ctk.CTkComboBox(frameBinarisation, values=["SEUIL_BASIQUE","SEUIL_ADAPTATIF","SEUIL_ADAPTATIF_GAUSSIEN", "SEUIL_SAUVOLA", "DEFAUT"], font=("font1", 15), dropdown_font=("font1", 15), command=self.changeTypeBin)
 		self.choixTypeBin.set(FrameTraitementImage.dicoTypeSeuil[str(self.typeBinarisation)])
 		self.choixTypeBin.grid(row=0, column=0, padx=60, pady=30)
 
@@ -120,6 +137,7 @@ class FrameTraitementImage(ctk.CTkFrame):
 
 
 		self.changeTypeBin(0)
+		self.actualiserImage()
 
 
 
@@ -187,7 +205,7 @@ class FrameTraitementImage(ctk.CTkFrame):
 
 
 	def appliquerFiltreMedian(self):
-		self.imageModif = cv.medianBlur(self.imageModif, 3)
+		self.imageModif = cv.medianBlur(cv2.imread(FrameTraitementImage.cheminImageModif), 3)
 		cv2.imwrite(FrameTraitementImage.cheminImageModif, self.imageModif)
 		self.actualiserImage()
 	
@@ -196,6 +214,10 @@ class FrameTraitementImage(ctk.CTkFrame):
 
 
 	def rogner(self):
+
+		if self.angleRotation != 0:
+			self.imageModif = rotation(self.imageModif, self.angleRotation, FrameTraitementImage.conserverBoundingBox)
+		
 
 		hauteur, _, _= self.imageModif.shape
 		
@@ -212,10 +234,13 @@ class FrameTraitementImage(ctk.CTkFrame):
 
 		self.canvasRognage.delete("all") #on efface le canvas
 		self.canvasPhotoModif.delete("all")
-		if self.angleRotation != 0:
-			self.imageModif = rotation(self.imageModif, self.angleRotation, FrameTraitementImage.conserverBoundingBox)
+		
 		self.imageModif= (self.imageModif[y0:y1, x0:x1])
+		if FrameTraitementImage.dicoTypeSeuil[self.choixTypeBin.get()] == 4:
+			self.imageBin = self.imageBin[y0:y1, x0:x1]
+
 		cv2.imwrite(FrameTraitementImage.cheminImageModif, self.imageModif)
+		cv2.imwrite(FrameTraitementImage.cheminImageBin, self.imageBin)
 		self.rognageParDefaut() #on remet les sliders comme il faut avec les bonnes valeurs
 		self.spinbox.set(0) #on réinitialise la rotation au cas où
 		self.angleRotation = 0
@@ -249,7 +274,7 @@ class FrameTraitementImage(ctk.CTkFrame):
 
 		self.actualiserImage()
 
-		
+
 
 	def rotation(self, nombre):
 		self.angleRotation += nombre
@@ -275,9 +300,18 @@ class FrameTraitementImage(ctk.CTkFrame):
 
 	def prendrePhotoOriginale(self):
 		#faut aussi remettre la rotation à 0, et réinitialiser le rognage
-		self.angleRotation = 0
 		self.spinbox.set(0) #on réinitialise la rotation au cas où
+		self.angleRotation = 0
 		cv.imwrite(FrameTraitementImage.cheminImageModif, cv2.imread("images/imageOriginale.png"))
+		if FrameTraitementImage.dicoTypeSeuil[self.choixTypeBin.get()] == 4:
+			self.imageModif = cv2.imread("images/imageOriginale.png")
+			self.angleRotation = FrameTraitementImage.angleOpti
+			self.imageBin = cv2.imread("images/imageBinDefaut.png")
+			cv2.imwrite(FrameTraitementImage.cheminImageBin, self.imageBin)
+			self.spinbox.set(self.angleRotation) 
+			
+			FrameTraitementImage.conserverBoundingBox = True
+			self.imageModif = rotation(self.imageModif, self.angleRotation, FrameTraitementImage.conserverBoundingBox)
 		self.actualiserImage()
 		self.rognageParDefaut()
 		self.enregistrerModif()
@@ -301,16 +335,27 @@ class FrameTraitementImage(ctk.CTkFrame):
 	
 	def actualiserImage(self): # montre la nouvelle image modifiée (et l'image binarisée)
 
-	
-		if self.angleRotation != 0: #si y a une rotation, faut binariser avant de faire la rotation, sinon on binarise aussi les contours et ça fait des trucs moches
-			imageSansRota = cv2.imread(FrameTraitementImage.cheminImageModif)  
-			self.imageBin = rotation( binarisation(imageSansRota, self.typeBinarisation, self.seuilBin, FrameTraitementImage.enleverFond) , self.angleRotation, FrameTraitementImage.conserverBoundingBox)
-			self.imageBin = binarisation(self.imageBin, Seuil=127, dejaNDG=True)
-			self.imageModif = rotation( imageSansRota  , self.angleRotation, FrameTraitementImage.conserverBoundingBox)
+		if FrameTraitementImage.dicoTypeSeuil[self.choixTypeBin.get()] != 4: #c'est la binarisation compliqué, on recalcule pas
 		
+			if self.angleRotation != 0: #si y a une rotation, faut binariser avant de faire la rotation, sinon on binarise aussi les contours et ça fait des trucs moches
+				imageSansRota = cv2.imread(FrameTraitementImage.cheminImageModif)  
+				self.imageBin = rotation( binarisation(imageSansRota, self.typeBinarisation, self.seuilBin, FrameTraitementImage.enleverFond) , self.angleRotation, FrameTraitementImage.conserverBoundingBox)
+				self.imageBin = binarisation(self.imageBin, Seuil=127, dejaNDG=True)
+				self.imageModif = rotation( imageSansRota  , self.angleRotation, FrameTraitementImage.conserverBoundingBox)
+			
+			else:
+				self.imageModif = cv2.imread(FrameTraitementImage.cheminImageModif)
+				self.imageBin = binarisation(self.imageModif, self.typeBinarisation, self.seuilBin, FrameTraitementImage.enleverFond)
+
 		else:
-			self.imageModif = cv2.imread(FrameTraitementImage.cheminImageModif)
-			self.imageBin = binarisation(self.imageModif, self.typeBinarisation, self.seuilBin, FrameTraitementImage.enleverFond)
+			if self.angleRotation != 0:
+				self.imageModif = rotation( cv2.imread(FrameTraitementImage.cheminImageModif)  , self.angleRotation, FrameTraitementImage.conserverBoundingBox)
+				self.imageBin = cv2.imread(FrameTraitementImage.cheminImageBin, cv2.IMREAD_GRAYSCALE)
+				self.imageBin = binarisation (rotation(self.imageBin, self.angleRotation, FrameTraitementImage.conserverBoundingBox ), typeBinarisation=0 , Seuil=127, dejaNDG=True)
+			else:
+				self.imageBin = cv2.imread(FrameTraitementImage.cheminImageBin, cv2.IMREAD_GRAYSCALE)
+				self.imageModif = cv2.imread(FrameTraitementImage.cheminImageModif)
+
 
 
 		imagePIL= Image.fromarray(self.imageModif)

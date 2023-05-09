@@ -46,13 +46,14 @@ def binarisation(img, typeBinarisation = 0, Seuil=128, Otsu=False, dejaNDG=False
 		case 2 :#SEUIL_ADAPTATIF_GAUSSIEN:
 			img = cv.adaptiveThreshold(img, 255 , cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11 , 2)
 		
-		case 3 :#SEUIL_OTSU:
-			_, img = cv.threshold(img, Seuil ,255,cv.THRESH_BINARY+cv.THRESH_OTSU)
-		
-		case 4 :#SEUIL_OTSU_GAUSS:
-			blur = cv.GaussianBlur(img,(5,5),0)
-			_, img = cv.threshold(blur, Seuil ,255,cv.THRESH_BINARY+cv.THRESH_OTSU)
-		
+		case 3 :#SEUIL_SAUVOLA:
+			img = cv.bitwise_not(img) #faut inverser pour sauvola, c'comme ça
+			img = cv.ximgproc.niBlackThreshold(img, 255, type=cv.ximgproc.BINARIZATION_SAUVOLA, blockSize=165, k=0.8)
+
+			
+		case 4 :#appliquer le filtre de base, bon jsp:
+			img = appliquerBinarisationParDefaut(img)
+			
 		case _:
 			print("mauvais argument pour typeBinarisation, aucun seuillage appliqué")
 	
@@ -266,8 +267,8 @@ def appliquerBinarisationParDefaut(image):
 		à la fin ça retourne une image binaire '''''''''prete''''''' pour la segmentation
 	
 	"""
-
-	image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+	if len(image.shape) == 3:
+		image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
 	masqueFeuilleBlanche = enleveFondNoir(image) #on garde le masque pour la fin
 
@@ -305,7 +306,7 @@ def appliquerBinarisationParDefaut(image):
 	#on a l'image à peu près correcte mais possiblement les bordures de la feuille
 	#faudrait crop....... (ou pas)
 
-	return image
+	return angleOptimal, image
 
 
 
@@ -361,7 +362,7 @@ def segmentationLigneRomain(image):
 
 	for row in range(0, image.shape[0]):
 		
-		if proj[row] > ligneMax * 0.05:
+		if proj[row] > ligneMax * 0.1:
 			lignePotentielle.append(row)
 
 	#on sait qu'on a environ que les lignes, on calcule la moyenne des lignes
@@ -376,7 +377,7 @@ def segmentationLigneRomain(image):
 
 	for row in range (0, image.shape[0]-4 ):
 		moyenneDesCinqLignes = sum([proj[row+i]  for i in range(5)]) / 5
-		if moyenneDesCinqLignes > moyenne * 0.1: # on vient de trouver une candidate
+		if moyenneDesCinqLignes > moyenne * 0.15: # on vient de trouver une candidate
 			if not enTrainDeLireUneLigne:
 				enTrainDeLireUneLigne = True
 				listeDesLignes.append([row])
