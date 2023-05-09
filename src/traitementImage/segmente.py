@@ -129,7 +129,7 @@ def segmentation(image):
 
     # on segmente l'image pour separer les caracteres
         for j in range(len(coord_caracteres)):
-            uncaractere = ligne[0:height_line, coord_caracteres[j][0]:coord_caracteres[j][1]]
+            _, uncaractere = cv2.threshold(ligne[0:height_line, coord_caracteres[j][0]:coord_caracteres[j][1]], 125, 255, cv2.THRESH_BINARY)
             img_caractere[i].append(uncaractere)
 
     # on donne une dimension de 128x128 aux caractères 
