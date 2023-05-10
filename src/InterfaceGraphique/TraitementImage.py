@@ -7,7 +7,7 @@ les fonctions prennent une image en entrée, elle doit être binarisée et en ni
 """
 
 
-
+from ultralytics import YOLO
 #assert <img> is not None,  "Message qui dit que ça a pas marché"
 
 import cv2 as cv
@@ -16,13 +16,13 @@ import math # pour les radians et les cosinus
 import numpy as np
 import shutil #pour supprimer les dossiers récursivement (faire attention)
 
+from segmente import *
 
 
 SEUIL_BASIQUE = 0
 SEUIL_ADAPTATIF = 1
 SEUIL_ADAPTATIF_GAUSSIEN = 2
-SEUIL_OTSU = 3
-SEUIL_OTSU_GAUSS = 4
+
 
 
 
@@ -117,8 +117,6 @@ def erosion (img, tailleMatrice=5):
 
 def compteNbErosion(img):
 	
-
-
 	img = cv.bitwise_not(img) #on inverse prck faut compter le nombre de pixels noir, pas blanc
 	
 	compteurNberosion = 0
@@ -145,8 +143,8 @@ def dilateCommeIlFaut(img):
 	img = cv.warpAffine(img, M, (img.shape[1]+2, img.shape[0]+2), borderValue=(255,255,255))
 	
 
-	nberosionAFaire = 8 - compteNbErosion(img)
-	# 8 correspond en gros à l'épaisseur des images utilisée pour entrainer YOLO
+	nberosionAFaire = 7 - compteNbErosion(img)
+	# 6 correspond en gros à l'épaisseur des images utilisée pour entrainer YOLO
 
 	if nberosionAFaire < 0: # le trait est trop épais, on augmente le blanc ( et réduit le noir, i.e. la lettre)
 		for i in range(-1 * nberosionAFaire):
@@ -180,10 +178,11 @@ def redimensionneImageEn128SansBord(img):
 
 def rendPretPourYolo(cheminVersDossier):
 	for filename in os.listdir(cheminVersDossier):
-		image = cv.imread(cheminVersDossier+'/'+filename, cv.IMREAD_GRAYSCALE)
-		image = redimensionneImageEn128SansBord(image)
-		image = dilateCommeIlFaut(image)
-		cv.imwrite(cheminVersDossier+'/'+filename, image)
+		if filename.endswith(".png"):
+			image = cv.imread(cheminVersDossier+'/'+filename, cv.IMREAD_GRAYSCALE)
+			image = redimensionneImageEn128SansBord(image)
+			image = dilateCommeIlFaut(image)
+			cv.imwrite(cheminVersDossier+'/'+filename, image)
 
 
 #fonction qui rotate une image
@@ -465,7 +464,7 @@ def segmentationLettreRomain(image):
 
 
 	total = np.sum(proj)
-	moyenne = (total/proj.shape[0] ) * 0.5
+	moyenne = (total/proj.shape[0] ) * 0.05
 
 	#on fait un premier passage où on récupère QUE les lignes qui sont potentiellement des lettres (au dessus de la moyenne)
 	#on recompte le nombre de ces potentielles lettres pour faire une moyenne sur le nombre de pixel de ces lettres
@@ -502,7 +501,7 @@ def segmentationLettreRomain(image):
 	#en gros pour rendre "équivalent" les textes qui ont des gros espaces et ceux qui en ont des petits
 	for colonne in range (2, image.shape[1]-2 ):
 		moyenneDesTroisColonnes = sum([proj[colonne+i]  for i in range(-2,3)]) / 5
-		if moyenneDesTroisColonnes > moyenneLettre * 0.15 : # on vient de trouver une candidate
+		if moyenneDesTroisColonnes > moyenneLettre * 0.02 : # on vient de trouver une candidate
 			if not enTrainDeLireUneLettre:
 				enTrainDeLireUneLettre = True
 				listeDesLettres.append([colonne])
@@ -567,7 +566,7 @@ def getVerticalProjectionProfile(image):
 # 	#l'image est déjà binarisée et en niveau de gris
 
 def segmenteRomain(image):
-	#image est déjà binarisée (heureusement)
+	#image est déjà binarisée (heureusement) et en NVG
 
 	listeLigne = segmentationLigneRomain(image)
 
@@ -595,135 +594,88 @@ def segmenteRomain(image):
 			imageLettre = imageLigne[0: imageLigne.shape[0] , lettre[0]:lettre[1]]
 			cv.imwrite(nomDossierLigne + "/lettre{:02d}.png".format(j), imageLettre)
 
-"""
-chemin="images/imageSegmentee/ligne00"
+
+def segmenteRomain(image):
+	listeLigne = segmentationLigneRomain(image)
+	listeImagettes = []
+
+	for i, ligne in enumerate(listeLigne):
+
+		imageLigne = image[ligne[0]: ligne[1] , 0: image.shape[1]]
+
+		listeLettre = segmentationLettreRomain(imageLigne)
+		listeImagettes.append([])
 
 
-for filename in os.listdir(chemin):
-	print(filename)
-	image = cv.imread(chemin+'/'+filename, cv.IMREAD_GRAYSCALE)
-	image = redimensionneImageEn128SansBord(image)
-	image = dilateCommeIlFaut(image)
-	cv.imwrite(chemin+'/'+filename, image)
-"""
+		#on a les coordonnées de chaque lettres, on crée les fichiers
+		for j, lettre in enumerate(listeLettre):
 
-# , cv.IMREAD_GRAYSCALE
-
-# img = cv.imread('images/imageModif.png')
-# test = appliquerBinarisationParDefaut(img)
-# cv.imwrite("testUltime.png", test)
-
-
-# imageInv = cv.bitwise_not(img)
-
-# masqueAdapt = binarisation(img, SEUIL_ADAPTATIF, dejaNDG=True)
-# masqueGauss = binarisation(img, SEUIL_ADAPTATIF_GAUSSIEN, dejaNDG=True)
-
-
-# imageNiBlack = cv.ximgproc.niBlackThreshold(imageInv, 255, type=cv.ximgproc.BINARIZATION_SAUVOLA, blockSize=165, k=0.8)
-
-
-# cv.imwrite("testSauvola.png", imageNiBlack)
-# cv.imwrite("masqueAdapt.png", cv.bitwise_or(imageNiBlack, masqueAdapt))
-# cv.imwrite("masqueGauss.png", cv.bitwise_or(imageNiBlack, masqueGauss))
+			imageLettre = imageLigne[0: imageLigne.shape[0] , lettre[0]:lettre[1]]
+			listeImagettes[-1].append(imageLettre)
+	
+	return listeImagettes
 
 
 
 
+def ecritImagetteDansFichier(imagettes): # liste de liste d'image
+	chemin="images/imageSegmentee"
 
+	try: # on remplace les anciennes images segmentées par les nouvelles
+		os.mkdir(chemin) # le dossier n'existe pas
+	except OSError as error: 
+		shutil.rmtree(chemin)
+		os.mkdir(chemin) # le dossier n'existe pas
 
-# img_bin = cv.ximgproc.niBlackThreshold(img, 255, type=cv.ximgproc.BINARIZATION_NIBLACK, blockSize=35, k=0.2)
-# cv.imwrite("images/binariseNiBlack.png", img_bin) 
+	for i, ligne in enumerate(imagettes):
 
-# th, img_bin = cv.ximgproc.niBlackThreshold(img, maxValue=255, type=cv.ximgproc.BINARIZATION_SAUVOLA, blockSize=35, k=0.2)
-# cv.imwrite("images/binariseSauvola.png", img_bin)
+		nomDossierLigne = chemin + "/ligne{:02d}".format(i)
+		os.mkdir(nomDossierLigne)
 
-# th, img_bin = cv.ximgproc.niBlackThreshold(img, maxValue=255, type=cv.ximgproc.BINARIZATION_WOLF, blockSize=35, k=0.2)
-# cv.imwrite("images/binariseWolf.png", img_bin)
+		for j, lettre in enumerate(ligne):
 
-# th, img_bin = cv.ximgproc.niBlackThreshold(img, maxValue=255, type=cv.ximgproc.BINARIZATION_NICK, blockSize=35, k=0.2)
-# cv.imwrite("images/binariseNick.png", img_bin)
-
-# cv.ximgproc.BINARIZATION_SAUVOLA
-
-"""segmenteRomain(im)
-
-test = cv.imread('images/imageSegmentee/ligne00/lettre06.png', cv.IMREAD_GRAYSCALE)
-test = redimensionneImageEn128SansBord(test)
-testO = dilatation(test)
-testF = erosion(test)
-testOK = dilateCommeIlFaut(test)
-
-cv.imwrite('images/imageSegmentee/ligne00/ouv.png', testO)
-cv.imwrite('images/imageSegmentee/ligne00/fer.png', testF)
-cv.imwrite('images/imageSegmentee/ligne00/OK.png', testOK)
-print(compteNbErosion(test))
-"""
+			
+			cv.imwrite(nomDossierLigne + "/lettre{:02d}.png".format(j), lettre)
 
 
 
 
-# Load as greyscale
-
-# test = dilatation(im,3)
-
-
-""" #pour voir les lignes
-for i in range(len(liste)):
-	#ligne haut
-	cv.line(im, (0,liste[i][0]), ( im.shape[1] ,liste[i][0]), (0,0,0), 1)
-	#ligne bas
-	cv.line(im, (0,liste[i][1]), ( im.shape[1] ,liste[i][1]), (0,0,0), 1)
-"""
-# im = enlevePointsNoirs(im)
+# for filename in os.listdir("images/imagesTestYOLO/img"):
+# 	print(filename)
+# 	_, _, _, imagettes = segmentation(cv.imread("images/imagesTestYOLO/img/" + filename))
+# 	ecritImagetteDansFichier(imagettes)
 
 
-
-#  #pour voir les lettres
-# for i in range(len(liste)):
-# 	#lettre gauche
-# 	cv.line(im, (liste[i][0], 0), ( liste[i][0], im.shape[0]), (0,0,0), 1)
-# 	#lettre droite
-# 	cv.line(im, (liste[i][1], 0), ( liste[i][1], im.shape[0]), (0,0,0), 1)
+# for filename in os.listdir("images/imagesTestYOLO/img"):
+# 	print(filename)
+# 	imagettes = segmenteRomain(cv.imread("images/imagesTestYOLO/img/"+filename, cv.IMREAD_GRAYSCALE))
+# 	ecritImagetteDansFichier(imagettes)
 
 
 
 
+"""petit programme qui "compte" la fiabilité de yolo"""
 
-"""
-im = im.transpose()
-# Invert
-im = 255 - im
+def compteCombienCoherent():
+	model = YOLO("src/pourYOLO/entrainementsYolo/bestUpperSansBordDilate.pt")
+	for lettre in os.listdir("images/imagesTestYOLO/imagesDeLaurent"):
+		
+		rendPretPourYolo("images/imagesTestYOLO/imagesDeLaurent/"+lettre)
 
-# Calculate horizontal projection
-proj = np.sum(im,1)
+		compteurJuste = 0
+		texteAEcrire = []
+		results = model.predict("images/imagesTestYOLO/imagesDeLaurent/"+ lettre, verbose = False)
+		for r in results:
+			probas = r.probs.numpy().tolist() # on chope la liste des probas
+			dico = [(model.names[i], proba ) for i, proba in enumerate(probas) ]
+			cinqMeilleuresProbas = sorted(dico, key=lambda x:x[1], reverse=True)[:5]
+			if cinqMeilleuresProbas[0][0] == lettre:
+				compteurJuste += 1
+			texteAEcrire.append(r.path[-12:])
+			for i in range(5):
+				texteAEcrire.append(cinqMeilleuresProbas[i][0] + '   ' + str(cinqMeilleuresProbas[i][1]) )
+			texteAEcrire.append('\n')
+		with open("images/imagesTestYOLO/imagesDeLaurent/" +lettre + '/' +  lettre + ".txt", "w") as file:
+			file.write( str(compteurJuste)+"/12 corrects\n\n" + '\n'.join(texteAEcrire))
 
-total = np.sum(proj,0)
-moyenne = total/proj.shape[0]
-
-print(moyenne)
-# Create output image same height as text, 500 px wide
-m = np.max(proj)
-w = 500
-result = np.zeros((proj.shape[0],500+1))
-
-# Draw a line for each row
-for row in range(im.shape[0]):
-
-	cv.line(result, (0,row), (int(proj[row]*w/m),row), (255,255,255), 1)
-	print(proj[row])
-
-result = result.transpose()
-# Save result
-cv.imwrite('images/result.png', result)
-
-
-
-im = cv.imread('images/imageBin.png', cv.IMREAD_GRAYSCALE)
-
-im = dilatation(im, 3)
-
-cv.imwrite("images/unedilatation.png", im)
-
-print(im.shape)
-"""
+		
