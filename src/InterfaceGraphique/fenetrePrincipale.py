@@ -11,6 +11,7 @@ from widgetUtiles import *
 from fenetrePhoto import FenetrePhoto
 from fenetreModifPhoto import FenetreModifPhoto
 from segmentation import segmentation
+from segmente import *
 from TraitementImage import *
 import FrameTraitementImage
 
@@ -115,10 +116,15 @@ class FenetrePrincipale(ctk.CTk):
 
 		cheminCWD = os.getcwd() # yolo comprend pas les chemins relatifs ...
 
-		model = YOLO(cheminCWD+"/src/pourYOLO/runs/classify/train14/weights/best.pt")
+		model = YOLO(cheminCWD+"/src/pourYOLO/entrainementsYolo/bestUpperSansBordDilate.pt")
 
-		imgASegmenter = cv2.imread("images/imageBin.png", cv2.IMREAD_GRAYSCALE)
-		segmenteRomain(imgASegmenter)
+		imgASegmenter = cv2.imread("images/imageBin.png")
+
+		_, _, _, imagettes = segmentation(imgASegmenter)
+
+		ecritImagetteDansFichier(imagettes)
+
+
 		lignes=[]
 		for dossier in sorted(os.listdir("images/imageSegmentee")):
 			
