@@ -27,7 +27,7 @@ pour i de 0 à taille(poidsEspace)-1 faire :
     poidsEspace[i] = poidsEspace[i] * (taille(poidsEspace)-i)
     SI += i
 
-moyenneEspaces = somme(tailleEspacesEntrelettres) / SI
+moyenneEspaces = somme(poidsEspace) / SI
 
 j = 0
 tant que tailleEspacesEntrelettres != [] faire :
@@ -36,7 +36,7 @@ tant que tailleEspacesEntrelettres != [] faire :
         F = lettres[j]; supprimer(lettre[j]);
         inserer(lettres,j,(D[0],F[1])) #inserer(tableau, indice, élément)
         supprimer(tailleEspacesEntrelettres[0])
-        j += 1
+        #j += 1
     sinon : 
         supprimer(tailleEspacesEntrelettres[0])
         j += 1
