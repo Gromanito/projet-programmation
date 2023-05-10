@@ -238,7 +238,7 @@ def trouveMeilleureAngle(image):
 	
 	"""
 	maxHisto=0
-	maxAngle = -30
+	maxAngle = -25
 
 	for i in range(-25, 25):
 		imageRotate = binarisation(rotation(image, i, False), Seuil=127, dejaNDG=True )

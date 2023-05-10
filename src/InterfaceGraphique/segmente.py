@@ -136,8 +136,8 @@ def segmentation(image):
     for i in range (len(img_caractere)):
         for j in range (len(img_caractere[i])):
 
-            img_caractere[i][j] = cv2.resize(src=img_caractere[i][j], dsize=(128, 128), interpolation = cv.INTER_NEAREST_EXACT)
-            _, img_caractere[i][j] = cv.threshold(img_caractere[i][j], 10, 255, cv.THRESH_BINARY) # on seuil prck ptre que ça floute de resize
+            img_caractere[i][j] = cv2.resize(src=img_caractere[i][j], dsize=(128, 128), interpolation = cv2.INTER_NEAREST_EXACT)
+            _, img_caractere[i][j] = cv2.threshold(img_caractere[i][j], 10, 255, cv2.THRESH_BINARY) # on seuil prck ptre que ça floute de resize
 
 
     
