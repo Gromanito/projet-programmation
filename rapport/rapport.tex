@@ -35,16 +35,15 @@
 	\listofalgorithms
 	\newpage
 	\section{Présentation du Sujet } 
-		\subsection{Le problème}
+		\subsection{La problématique}
 			L'essence du problème est qu'un texte dans un document est très diffrent d'une photo du même document. Dans le 1er cas, le format rend le contenu comprehensible par un ordinateur, il peut donc 
 			chercher un mot dans le texte ou le modifier pour corriger des fautes d'orthographe. Dans le 2e cas, l'image représente la même chose. MAIS, la machine ne comprend le sens de l'information 
 			représentée. Il voit les pixels mais pas les charactères. De plus, des imperfections dans la capture du document changent la photo (ex: luminosité, angle ...), il y a une modification des informations
 			alors que le texte ne change pas.
-			\\Réussir à lire du texte sur des images permettrait de faciliter la numérisation de document papier. Ainsi, libérer les Humains de quelques tâches redondantes. On peut imaginer ce genre de 
-			système en train de traiter des formulaires ou encore d'améliorer les moteurs de recherche avec des images qui contient du texte.
+			\\Réussir à lire du texte sur des images permettrait de faciliter la numérisation de document papier. Ainsi, libérer les Humains de quelques tâches redondantes. Lire des formulaires ou encore d'améliorer les moteurs de recherche avec des images qui contient du texte sont des applications possibles.
 		\subsection*{}
-			Ce problème est particulièrement intéressant. En effet, tout ce qui traite de l'information appartient à notre domaine d'étude. En plus de l'automatisation. Nous avons pu constater une explosion
-			de l'intelligence artificielle ces dernières années. Notamment les réseaux neuronaux. La reconnaissance d'image fait partie des objectifs qu'ils ont déjà atteints. Ce projet est tout à fait 
+			Ce problème est particulièrement intéressant. En effet, un projet sur le traitement automatique de l'information numérique est exactement ce que des étudiants en informatique devraient faire. Nous avons pu constater une explosion
+			de l'intelligence artificielle ces dernières années. Notamment les réseaux neuronaux. À l'heure actuel, ils sont capables de detecter des objets et de les classifier. Ce projet est tout à fait 
 			intéressant pour de futurs étudiants en master IASD.
 		\subsection{Les différentes approches}
 			\subsubsection{k-Nearest Neighbor}
@@ -52,8 +51,8 @@
 			\subsubsection{Template matching} 
 				En gros, comparaison de l'image avec la base de donnée entière à l'aide d'une fonction de distance. 
 		\subsection{Objectifs}
-			Notre but est de créer un logiciel dont une personne ce servirait pour tranformer une image qui contient des symboles en un texte manipulable par un ordinateur.\\
-			Notre but initiale sera de reconnaitre des images simples et de bonne qualité avec des symboles de l'alphabet latin (26 lettres) seulement en majuscules sur 1 ligne.
+			Notre but est de créer un logiciel pour tranformer une image qui contient des symboles en un texte numérique.\\
+			Initialement, nous nous concentrerons sur des images simples et de bonne qualité avec des symboles de l'alphabet latin (26 lettres) seulement en majuscules sur 1 ligne. Puis, si le temps nous le permet, on aggrandira la portée du problème.
 		\subsection{Cahier des charges}
 			\subsubsection{Besoins et contraintes}
 				\paragraph{Les besoins}
@@ -66,11 +65,11 @@
 					\subparagraph{Extraction des charactères}
 						Les charactères seront ensuite découpés pour former leurs propres imagettes .i.e une image qui contient TEST devriendra 4 petites imagettes contenant respectivement T E S T.
 					\subparagraph{Reconnaissance}
-						Les imagettes feront l'objet d'une reconnaissance de façon individuelle. Dans notre cas nous choisissons d'utiliser un réseau neuronal convolutif.
+						Les imagettes feront l'objet d'une reconnaissance de façon individuelle. La solution que nous choisissons d'implémenter est un réseau neuronal convolutif.
 					\subparagraph{Présenter}
 						Une fois que les imagettes sont reconnues en charactère. Il est nécessaire de les assembler et d'afficher à l'utilisateur les mots reconnus.
 				\paragraph{Les contraintes}
-					Nous nous fixons comme contraintes de ne pas utiliser de services comme Google Collab car Google possède un modèle économique type "Freemium" (gratuit mais payant). Nous souhaitons créer un logiciel suffisament performant pour pouvoir être exécuter sur l'une de nos machines personelles. \\De plus, une webcam est nécessaire, ou alors un appareil photo numérique.
+					Nous nous fixons comme contraintes de ne pas utiliser de services comme Google Collab car Google possède un modèle économique type "Freemium" (initialement gratuit mais avec des fonctinalités payantes). Nous souhaitons créer un logiciel suffisament performant pour qu'il puisse être lancé sur l'une de nos machines personelles. \\De plus, une webcam est nécessaire, ou alors un appareil photo numérique.
 			\subsubsection{Résulats attendus}
 				\paragraph{}
 					Notre programme doit reconnaître des lettres manuscrites sur un fond blanc. Les lettres seront des charactères majuscule non-liées et sans accents ni charactère spécial.
@@ -81,7 +80,7 @@
 				\begin{wrapfigure}{r}{0.15\textwidth}
 					\includegraphics[width=0.15\textwidth]{OpenCV.png}
 				\end{wrapfigure}
-				Dans ce projet, nous choisissons d'utiliser la librairie open source de vision par ordinateur (Open Computer Vision). Elle contient les fonctionnalités de pré-traitement d'image nécessaire dans ce projet. Nous aurons notament besoins des fonctions de filtrage d'image.
+				Dans ce projet, nous choisissons d'utiliser la librairie open source de vision par ordinateur (Open Computer Vision). Elle contient les fonctionnalités de pré-traitement d'image nécessaire dans ce projet. Nous utiliserons surtout les fonctions de filtrage d'image.
 				\newline
 			\subsubsection{You Only Look Once}
 				You Only Look Once (YOLO) est une archicture de Réseau Neuronal Convolutif (CNN) de type "Region based" (R-CNN) qui est capable de localiser des objets dans une image et en même temps, les classifier.
@@ -105,12 +104,12 @@
 			\label{fig:useCaseDiagram}
 		\end{figure}
 		\subsection{Interface Homme-Machine}
-			L'IHM nous permet de prendre des photos avec la webcam connectée à l'ordinateur ou choisir à partir d'une fenêtre un chemin vers une image. 
+			L'IHM nous permet de prendre des photos avec une webcam connectée à l'ordinateur ou choisir à partir d'une fenêtre une image déjà existante. 
 %Diagramme de Cas d'Utilisation à la page \pageref{fig:useCaseDiagram}. 
 			\begin{figure}[H]
 				\includegraphics[width=0.8\textwidth]{modif.png}
 				\centering
-				\caption{Fenêtre de l'IHM quand on modifie une image}
+				\caption{Fenêtre de l'IHM où l'on peut rogner, pivoter et filtrer une image}
 				\label{fig:modif}
 			\end{figure}
 			\paragraph{}
