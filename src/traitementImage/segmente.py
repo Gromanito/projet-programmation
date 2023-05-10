@@ -56,7 +56,10 @@ def coordonneeCaractere(myprojection):
     coordDF = []
     for i, value in enumerate(myprojection):
         if value!=0:
-            if not danslecaractere or (danslecaractere and i == len(myprojection)-1): coordDF.append(i)
+            if not danslecaractere or (danslecaractere and i == len(myprojection)-1): 
+                coordDF.append(i)
+                if i == len(myprojection)-1 and len(coordDF)%2!=0:
+                    coordDF.pop(-1)
             danslecaractere = True
         else : 
             if danslecaractere : coordDF.append(i)
