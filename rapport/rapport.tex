@@ -9,6 +9,10 @@
 \usepackage{float}
 \usepackage{blindtext}
 \usepackage{algorithm2e}
+% \usepackage[open,openlevel=1]{bookmark}
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=black,bookmarksopen=true,bookmarksnumbered=true]{hyperref}
+
+\usepackage{bookmark}
 
 \RestyleAlgo{ruled}
 \graphicspath{ {./img/} }
@@ -83,9 +87,8 @@
 				Dans ce projet, nous choisissons d'utiliser la librairie open source de vision par ordinateur (Open Computer Vision). Elle contient les fonctionnalités de pré-traitement d'image nécessaire dans ce projet. Nous utiliserons surtout les fonctions de filtrage d'image.
 				\newline
 			\subsubsection{You Only Look Once}
-				You Only Look Once (YOLO) est une archicture de Réseau Neuronal Convolutif (CNN) de type "Region based" (R-CNN) qui est capable de localiser des objets dans une image et en même temps, les classifier.
-				\paragraph{Expliquons (un peu tout petit peu) plus en détail les réseaux neuronaux}
-					Les réseaux de neurone simulent plus ou moins le fonctionnement de notre cerveau. Parlons d'abord de l'élément le plus petit et on va progresser jusqu'aux CNN.
+				\paragraph{Expliquons (un peu tout petit peu) plus en détail les réseaux de neurones convolutifs}
+					Les réseaux de neurone simulent plus ou moins le fonctionnement de notre cerveau. Parlons d'abord du neurone formel et on va progresser jusqu'aux CNN.
 					\subparagraph{Le neurone} va prendre plusieurs entrées, des nombres, faire une opération avec une fonction d'activation et en sortie retourner le résultat.
 					\subparagraph{Réseau de neurone} L'architecture des réseaux de neurone simple est organisée en couche. La 1er couche qui est l'entrée (censée reprensenter les yeux).
 						La dernière couche représente la sortie, par exemple si le réseau est entrainé pour reconnaitre des chiens, la sortie doit retourner une valeur proche de 1 si c'est un chien et 0 sinon.
@@ -93,31 +96,33 @@
 					\\Le désavantages de cette approche est qu'il est nécessaire de lui donner des "charactéristiques". Pour reconnaitre si cet animal est un chien on ne va pas lui donner l'image directement, on va lui dire en entrée si ça a des poils, la couleur de son pelage, le nombre de pattes, la forme des oreilles.
 					\subparagraph{Les CNN} blablabla
 					\subparagraph{R-CNN}
+				\paragraph{}
+					You Only Look Once (YOLO) est une archicture de Réseau Neuronal Convolutif (CNN) de type "Region based" (R-CNN) qui est capable de localiser des objets dans une image et en même temps, les classifier.
 		\subsection*{test}
 			\blindtext
 	\newpage
 	\section{Développements Logiciel : Conception, Modélisation, Implémentation}
 		\begin{figure}[h]
+			\caption{Diagramme de cas d'utilisation}
 			\includegraphics[width=\textwidth]{UseCaseDiagram.png}
 			\centering
-			\caption{Diagramme de cas d'utilisation}
 			\label{fig:useCaseDiagram}
 		\end{figure}
 		\subsection{Interface Homme-Machine}
 			L'IHM nous permet de prendre des photos avec une webcam connectée à l'ordinateur ou choisir à partir d'une fenêtre une image déjà existante. 
 %Diagramme de Cas d'Utilisation à la page \pageref{fig:useCaseDiagram}. 
 			\begin{figure}[H]
+				\caption{Fenêtre de l'IHM où l'on peut rogner, pivoter et filtrer une image}
 				\includegraphics[width=0.8\textwidth]{modif.png}
 				\centering
-				\caption{Fenêtre de l'IHM où l'on peut rogner, pivoter et filtrer une image}
 				\label{fig:modif}
 			\end{figure}
 			\paragraph{}
 				Après avoir entrer une image, il est possible qu'il y ait beaucoup de bruit, dans ce cas là, nous pouvons rogner l'image pour enlever des ombres sur les bords, faire des rotations et filtrer pour enlever le bruit comme illustrée sur la figure \ref{fig:modif}
 			\begin{figure}[H]
+				\caption{Fenêtre de l'IHM après présentation des charactères reconnus}
 				\includegraphics[width=0.8\textwidth]{recon.png}
 				\centering
-				\caption{Fenêtre de l'IHM après présentation des charactères reconnus}
 				\label{fig:recon}
 			\end{figure}
 			\paragraph{}Sur la figure \ref{fig:recon}, on peut voir qu'après avoir obtenu une image de bonne qualité, notre programme va segmenter les charactères, en faire des imagettes et donner ces imagettes individuellement à YOLO. Ensuite après cette reconnaissance, l'IHM présente le résultat.
@@ -241,46 +246,46 @@
 				\KwRet{lettres}
 			\end{algorithm}
 			\begin{figure}
+				\caption{Exemple d'une image après filtrage}
 				\includegraphics[width=\textwidth]{segmentation_image_originel.png}
 				\centering
-				\caption{Exemple d'une image après filtrage}
 				\label{fig:imageOriginel}
 			\end{figure}
 			\paragraph{} Sur la figure \ref{fig:imageOriginel}, nous voyons une image de bonne qualité prête à être segmenter par l'algorithme n°\ref{alg:segmentation} (page \pageref{alg:segmentation}). 
 			\begin{figure}
+				\caption{Images de nos 3 lignes crée à partir de l'image de départ}
 				\includegraphics[width=.8\textwidth]{segmentation_ligne1.png}
 				\centering
 				\includegraphics[width=.8\textwidth]{segmentation_ligne2.png}
 				\centering
-				\caption{Images de nos 3 lignes crée à partir de l'image de départ}
 				\label{fig:imageLignes}
 			\end{figure}
 			% \paragraph{} On voit sur la figure \ref{fig:imageLignes} à la page \pageref{fig:imageLignes} que dû à un filtrage de bonne qualité, nous obtenons exactement 2 lignes comme attendus. 
 			\begin{wrapfigure}{r}{0.35\textwidth}
-					\includegraphics[width=0.35\textwidth]{structDonnee.png}
 					\caption{Structure de données dans l'algorithme SEGMENTATION}
+					\includegraphics[width=0.35\textwidth]{structDonnee.png}
 					\label{fig:structDonnee}
 			\end{wrapfigure}
 			\paragraph{} Grâce à une projection vertical, nous obtenons ce tableau (voir figure \ref{fig:structDonnee}). La 1er ligne de ce tableau contient autant de tuples que le nombre de lignes. Chaque tuples contient la commposante en ordonnée du début et de la fin d'une ligne. En choississant arbitrairement comme largeur d'une ligne, la largeur de l'image, on extrait nos 2 lignes comme sur la figure \ref{fig:imageLignes}.
 			\paragraph{} Maintenant que nous avons isoler les lignes, nous allons maintenant découper les lettres de chaque lignes en suivant l'algorithme n°\ref{alg:coordcar} page \pageref{alg:coordcar}
-			\paragraph{} Étant donnée que l'image est filtré, en noir et blanc et binairisé, lorsqu'une lettre est présente à un endroit donnée, cela signifie que sur la projection vertical, l'histogramme est supérieur à 0 à cet endroit là. Sinon, il n'y a pas de lettre et l'histogramme est à 0. L'algorithme n°\ref{alg:coordcar} va parcourir totalement l'histogramme de projection et va tenté de dectecter ces "zones pleines" et récupérer l'indice de début et de fin de ces zones qui correspondront à la limite gauche et droit de la lettre sur l'image. Nous pouvons voir le résultats de cette fonction sur la figure \ref{fig:structDonnee} et il y a extrait d'un histogramme horizontal dans l'annexe (page \pageref{fig:histoX}).
+			\paragraph{} Étant donnée que l'image est filtré, en noir et blanc et binairisé, lorsqu'une lettre est présente à un endroit donnée, cela signifie que sur la projection vertical, l'histogramme est supérieur à 0 à cet endroit là. Sinon, il n'y a pas de lettre et l'histogramme est à 0. L'algorithme n°\ref{alg:coordcar} va parcourir totalement l'histogramme de projection et va tenté de dectecter ces "zones pleines" et récupérer l'indice de début et de fin de ces zones qui correspondront à la limite gauche et droit de la lettre sur l'image. Nous pouvons voir le résultats de cette fonction sur la figure \ref{fig:structDonnee} et des histogrammes de projection horizontal dans l'annexe (page \pageref{fig:histoX1}).
 			\begin{figure}
+				\caption{Imagettes des charactères crée à partir de la 1e ligne}
 				\includegraphics[scale=.3]{segmentation_F.png}
 				\centering
 				\includegraphics[scale=.3]{segmentation_O1.png}
 				\centering
 				\includegraphics[scale=.3]{segmentation_O2.png}
 				\centering
-				\caption{Imagettes des charactères crée à partir de la 1e ligne}
 			\end{figure}
 			\begin{figure}
+				\caption{Imagettes des charactères crée à partir de la 2e ligne}
 				\includegraphics[scale=.3]{segmentation_B.png}
 				\centering
 				\includegraphics[scale=.3]{segmentation_A.png}
 				\centering
 				\includegraphics[scale=.3]{segmentation_R.png}
 				\centering
-				\caption{Imagettes des charactères crée à partir de la 2e ligne}
 			\end{figure}
 	\newpage
 	\section{Analyse des Résulats}
@@ -308,11 +313,24 @@
 	\newpage
 	\section*{Bibliographie}
 		TBD
+	\newpage
 	\section*{Annexes}
 		\begin{figure}
-				\includegraphics[width=\textwidth]{histoX.png}
-				\centering
-				\caption{Extrait d'un histogramme de projection horizontal}
-				\label{fig:histoX}
-			\end{figure}
+			\caption{Histogramme de projection vertical}
+			\includegraphics[width=.7\textwidth]{histoY.png}
+			\centering
+			\label{fig:histoY}
+		\end{figure}
+		\begin{figure}
+			\caption{Histogramme de projection horizontal}
+			\includegraphics[width=0.7\textwidth]{histoX1.png}
+			\centering
+			\label{fig:histoX1}
+		\end{figure}
+		\begin{figure}
+			\caption{Histogramme de projection horizontal}
+			\includegraphics[width=.7\textwidth]{histoX2.png}
+			\centering
+			\label{fig:histoX2}
+		\end{figure}
 \end{document}
