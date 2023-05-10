@@ -2,5 +2,6 @@
 *.log
 *.lof
 *.toc
+*.loa
 pre-traitement-img
 pre-traitement-img.*
