@@ -75,7 +75,7 @@ def coordonneeCaractere(myprojection):
             F = lettres.pop(j)
             lettres.insert(j,(D[0],F[1]))
             espaceEntreLettre.pop(0)
-            j += 1
+            # j += 1 En fait c'était ça le probleme 
         else :
             espaceEntreLettre.pop(0)
             j += 1
