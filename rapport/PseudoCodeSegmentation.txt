@@ -1,0 +1,49 @@
+Entrée : image en RGB
+Sortie :Tableau de couples d'entier représentant les coordonnée de début et de fin des lignes sur l'image
+        Tableau de tableau de couple d'entier représentant les coordonnée de début et de fin des lettres par lignes, 
+        Tableau d'image des lignes
+        Tableau de tableau d'image des caractères 
+
+SEMENTATION(image):
+
+ndgImage = convertirImageEnNDG(image)
+
+# on met l'image en noir et blanc sauf que le seuillage est inversé 
+imageBinaire = binarisationInversé(ndgImage)
+
+# on fait la somme des pixels sur les colomnes et on les divise par 255
+projectionHorizontale = (sommeValPixel(imageBinaire, axe=1)) / 255 
+delimitationDesLignes = coordonneeLigne(projectionHorizontal)
+
+imagesLignes = []
+
+# on copie une zone de l'image correspondant à une ligne grâce aux coordonnées calculées 
+# et on l'ajoute à notre tableau d'image des lignes 
+pour (x,y) dans delimitationDesLignes faire :
+    imagesLignes.ajouter(ndgImage[x:y, 0:longeurImage])
+
+# on initialise le tableau de tableaux des images de Caractère on fonction du nombre de ligne detecté 
+imagesCaracteres = [[] pour i allant de 0 à longeur(imagesLignes)]
+
+# on initialise le tableau de tableaux de couple de coordonnées  on fonction du nombre de ligne 
+coordonneesCaracteres = [[] pour i allant de 0 à longeur(imagesLignes)]
+
+pour index, uneLigne dans imagesLignes faire :
+    ligneBinaire = binarisationInversé(uneLigne)
+
+    # on fait la somme des pixels sur les lignes et on les divise par 255
+    projectionVerticale = (sommeValPixel(imageBinaire, axe=0)) / 255
+
+    delimitationDesCaracteres = coordonneeCaractere(projectionVerticale)
+    
+    # on ajoute les coordonnées au tableau de coordonnées 
+    coordonneeCaractere[index].ajouter(delimitationDesCaracteres)
+    
+    # on copie une zone de l'image correspondant à un caractère grâce aux coordonnées calculées
+    # et on l'ajoute à notre tableau d'image des lignes 
+    pour (x,y) dans delimitationDesCaracteres faire :
+        imagesCaracteres[index].ajouter(ndgImage[0:hauteurUneLigne, x:y])
+    
+    redimensionnerImage(imagesCaracteres[index],hauteur = 128,longeur = 128)
+
+retourner coordonneeLigne, imagesLignes, coordonneesCaracteres, imagesCaracteres

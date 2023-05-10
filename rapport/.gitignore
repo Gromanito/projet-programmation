@@ -1,0 +1,6 @@
+*.aux
+*.log
+*.lof
+*.toc
+pre-traitement-img
+pre-traitement-img.*

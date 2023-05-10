@@ -1,0 +1,44 @@
+Entrée : tableau de flottant représentant la projection vertical d'une image
+Sortie : tableau de couple d'entier indiquant les coordonnées du début et de la fin d'une lettre
+
+COORDONNEECARACTERE(T):
+coord_caractere = []
+
+danslecaractere = False
+DF = [] # pair = début; impair = fin  
+
+pour i de 0 à taille(T) faire :
+    si T[i] != 0 alors :
+        si !danslecaractere ou (danslecaractere  et i == taille(T)-1) alors :
+            DF.ajouter(i)
+        danslecaractere = True 
+    sinon :
+        si danslecaractere alors :
+            DF.ajouter(i)
+        danslecaractere = False
+
+lettres = [ (DF[i],DF[i+1]) pour i de 0 à taille(DF) avec un pas de 2 ]
+
+tailleEspacesEntrelettres = [ lettres[i+1][0]-lettres[i][1] pour i de 0 à taille(lettres)-1 ]
+poidsEspace = trillageCroissant(tailleEspacesEntrelettres)
+
+SI = 0 #SommeIndice
+pour i de 0 à taille(poidsEspace)-1 faire :
+    poidsEspace[i] = poidsEspace[i] * (taille(poidsEspace)-i)
+    SI += i
+
+moyenneEspaces = somme(tailleEspacesEntrelettres) / SI
+
+j = 0
+tant que tailleEspacesEntrelettres != [] faire :
+    si tailleEspacesEntrelettres < moyenneEspaces*0.2 alors :
+        D = lettres[j]; supprimer(lettres[j]);
+        F = lettres[j]; supprimer(lettre[j]);
+        inserer(lettres,j,(D[0],F[1])) #inserer(tableau, indice, élément)
+        supprimer(tailleEspacesEntrelettres[0])
+        j += 1
+    sinon : 
+        supprimer(tailleEspacesEntrelettres[0])
+        j += 1
+
+retourner lettres

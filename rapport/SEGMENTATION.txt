@@ -1,0 +1,14 @@
+Entrée : une image RGB de résolution LARGEURxHAUTEUR représenter par n pixels (3 entiers/pixel)
+Sortie : ???
+SEGMENTATION(img):
+float horizontal_pixel_sum[LARGEUR] = [0] //init à 0
+num_ligne=0
+Pour i allant de 0 à n-1 faire
+    horizontal_pixel_sum[num_ligne] += 1 
+
+    if (num_ligne) >= LARGEUR alors
+        num_ligne++
+
+float myprojectiony[LARGEUR] = [0]
+Pour i allant de 0 à LARGEUR-1 faire
+    myprojectiony = horizontal_pixel_sum[i] / 256
