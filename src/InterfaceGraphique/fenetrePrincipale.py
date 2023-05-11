@@ -154,7 +154,7 @@ class FenetrePrincipale(ctk.CTk):
 		labelTexteReconnu = ctk.CTkLabel(self.frameTexteReconnu, text="Texte reconnu : ", font=("font1", 30))
 		labelTexteReconnu.grid(row=0, column=0, padx=100, pady=5)
 
-		labelTexteReconnuYolo = ctk.CTkLabel(self.frameTexteReconnu, text="\n".join(lignes), font=("font1", 30))
+		labelTexteReconnuYolo = ctk.CTkLabel(self.frameTexteReconnu, text="\n".join(lignes), font=("font1", 20))
 		labelTexteReconnuYolo.grid(row=0, column=1, padx=10, pady=5)
 		
 		

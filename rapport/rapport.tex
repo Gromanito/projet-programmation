@@ -41,11 +41,16 @@
 	\newpage
 	\section{Présentation du Sujet } 
 		\subsection{La problématique}
-			L'essence du problème est qu'un texte dans un document est très diffrent d'une photo du même document. Dans le 1er cas, le format rend le contenu comprehensible par un ordinateur, il peut donc 
-			chercher un mot dans le texte ou le modifier pour corriger des fautes d'orthographe. Dans le 2e cas, l'image représente la même chose. MAIS, la machine ne comprend le sens de l'information 
-			représentée. Il voit les pixels mais pas les charactères. De plus, des imperfections dans la capture du document changent la photo (ex: luminosité, angle ...), il y a une modification des informations
-			alors que le texte ne change pas.
-			\\Réussir à lire du texte sur des images permettrait de faciliter la numérisation de document papier. Ainsi, libérer les Humains de quelques tâches redondantes. Lire des formulaires ou encore d'améliorer les moteurs de recherche avec des images qui contient du texte sont des applications possibles.
+			\paragraph{}
+				La reconnaissance de l'écriture manuscrite consiste à traduire un texte manuscrit en un texte numérique, interprétable par l'ordinateur. Bien que cette application est utilisé dans divers domaine, la reconnaissance de l'écriture manuscrite est toujours considéré comme un problème ???. La variation des styles d'écritures manuscrites d'une personne à l'autre et la mauvaise qualité du texte pose des obstacles importants à sa convertion en texte numérique.
+				%  Ce traitement peut être utilisé dans le traitement des chèques dans les banques, traitement de formulaires, résolutions d'adresse postales sur des lettres.
+
+
+			% L'essence du problème est qu'un texte dans un document est très diffrent d'une photo du même document. Dans le 1er cas, le format rend le contenu comprehensible par un ordinateur, il peut donc 
+			% chercher un mot dans le texte ou le modifier pour corriger des fautes d'orthographe. Dans le 2e cas, l'image représente la même chose. MAIS, la machine ne comprend le sens de l'information 
+			% représentée. Il voit les pixels mais pas les charactères. De plus, des imperfections dans la capture du document changent la photo (ex: luminosité, angle ...), il y a une modification des informations
+			% alors que le texte ne change pas.
+			% \\Réussir à lire du texte sur des images permettrait de faciliter la numérisation de document papier. Ainsi, libérer les Humains de quelques tâches redondantes. Lire des formulaires ou encore d'améliorer les moteurs de recherche avec des images qui contient du texte sont des applications possibles.
 		\subsection*{}
 			Ce problème est particulièrement intéressant. En effet, un projet sur le traitement automatique de l'information numérique est exactement ce que des étudiants en informatique devraient faire. Nous avons pu constater une explosion
 			de l'intelligence artificielle ces dernières années. Notamment les réseaux neuronaux. À l'heure actuel, ils sont capables de detecter des objets et de les classifier. Ce projet est tout à fait 
@@ -150,7 +155,7 @@
 		\subsection{Entrainement de YOLO}
 			TBD
 	\section{Algorithmes et Analyse}
-		\subsection{YOLO}
+		% \subsection{YOLO}
 		\subsection{Segmentation par histogramme de projection}
 			\begin{algorithm}
 				\SetKwInput{Strat}{Stratégie}
@@ -159,25 +164,26 @@
 				\KwData{image en RGB}
 				% \KwOut{output}
 				% \KwOut{output}
-				\Strat{D'abord, une segmentation des lignes par projection vertical. 
-				Puis, dans un 2e temps, segmentation des caractères grâce à une projection horizontal de chaque ligne individuellement}
-				\KwResult{\\Tableau de couples d'entier représentant les coordonnées y de début et de fin des lignes sur l'image
-        				\\Tableau de tableau de couple d'entier représentant les coordonnée x de début et de fin des lettres par lignes, 
+				\Strat{la segmentation se produit en deux temps. 
+				En premier, la segmentation des lignes avec la projection verticale, 
+				et par la suite la segmentation des caractères par la projection horizontale.}
+				\KwResult{\\Tableau de couples d'entier représentant les coordonnées en y de début et de fin des n des lignes sur l'image.
+        				\\Tableau de tableau de couple d'entier représentant les coordonnées en x de début et de fin des n lettres contenues dans chaque ligne.
         				\\Tableau d'image des lignes
-        				\\Tableau de tableau d'image des caractères}
+						\\Tableau de tableau d'image des caractères}
 				\BlankLine
 				$ndgImage \gets convertirImageEnNDG(image)$\;
 				\BlankLine
 				\tcc{on met l'image en noir et blanc sauf que le seuillage est inversé}
 				$imageBinaire \gets binarisationInversé(ndgImage)$\;
 				\BlankLine
-				\tcc{on fait la somme des pixels sur les colomnes et on les divise par 255}
+				\tcc{on fait la somme des pixels sur les colonnes et on les divise par 255}
 				$projectionHorizontale = (sommeValPixel(imageBinaire, axe=1)) / 255$\;
 				$delimitationDesLignes = coordonneeLigne(projectionHorizontal)$\;
 				\BlankLine
 				$imagesLignes = []$\;
 				\BlankLine
-				\tcc{on copie une zone de l'image correspondant à un caractère grâce aux coordonnées calculées\\et on l'ajoute à notre tableau d'image des lignes}
+				\tcc{on copie une zone de l'image correspondant à une ligne grâce aux coordonnées calculées\\et on l'ajoute à notre tableau d'image de lignes}
 				\For{(x,y) dans delimitationDesLignes}{imagesLignes.ajouter(ndgImage[x:y, 0:longeurImage])}
 				\BlankLine
 				\tcc{on initialise le tableau de tableaux des images de Caractère on fonction du nombre de ligne detecté}
@@ -189,7 +195,7 @@
 				\For(){index, uneLigne dans imagesLignes}
 				{
 					$ligneBinaire = binarisationInversé(uneLigne)$\;
-					\tcc{on fait la somme des pixels sur les lignes et on les divise par 255}
+					\tcc{on fait la somme des pixels sur les lignes de l'image et on les divise par 255}
 					$projectionVerticale = (sommeValPixel(imageBinaire, axe=0)) / 255$\;
 					$delimitationDesCaracteres = coordonneeCaractere(projectionVerticale)$\;
 					\BlankLine
@@ -200,7 +206,7 @@
 					{
 						$imagesCaracteres[index].ajouter(ndgImage[0:hauteurUneLigne, x:y])$\;
 					}
-					$redimensionnerImage(imagesCaracteres[index],hauteur = 128,longeur = 128)$\;
+					$redimensionnerImage(binarisation(imagesCaracteres[index],hauteur = 128,longeur = 128), seuil = 127)$\;
 					\BlankLine
 				}
 				\KwRet{$delimitationDesLignes,delimitationDesCaracteres,imagesLignes,imagesCaracteres$}
@@ -235,7 +241,7 @@
 						$dansLeCaractere = False$\;
 					}
 				}
-				$lettres = [ (DF[i],DF[i+1]) pour i de 0 à taille(DF) avec un pas de 2 ]$\;
+				lettres $\gets$ [ (DF[i],DF[i+1]) pour i de 0 à taille(DF) avec un pas de 2 ]\;
 				\BlankLine
 				$tailleEspacesEntrelettres = [ lettres[i+1][0]-lettres[i][1] pour i de 0 à taille(lettres)-1 ]$\;
 				$poidsEspace = trillageCroissant(tailleEspacesEntrelettres)$\;
@@ -304,7 +310,20 @@
 			\end{figure}
 	\newpage
 	\section{Analyse des Résulats}
-		TBD
+		\subsection{Mesure expérimental de YOLO}
+			Nous procédure de test est la suivante : Écrire des lettres de moins en moins bien, ???, YOLO, grah
+			\begin{figure}[H]
+				\caption{}
+				\includegraphics[width=\textwidth]{grapYoloReussite.png}
+				\centering
+				\label{fig:graph:reussite}
+			\end{figure}
+			\begin{figure}[H]
+				\caption{}
+				\includegraphics[width=\textwidth]{grapYoloConfiance.png}
+				\centering
+				\label{fig:graph:confiance}
+			\end{figure}
 	\section{Gestion du Projet}
 		\paragraph{} Pendant ce projet, nous avons due communiquer et collaborer ensembles afin d'atteindre not but commun. Voici les outils que nous avons utilisé.
 		\paragraph{} Premierement, pour communiquer nous avons utiliser l'application Discord. Sur lequel nous avons un groupe où nous nous envoyons des messages, des images et des fichiers.
@@ -331,19 +350,19 @@
 		% \bibliography{refs} % Entries are in the refs.bib file
 	\newpage
 	\section*{Annexes}
-		\begin{figure}
+		\begin{figure}[H]
 			\caption{Histogramme de projection vertical}
 			\includegraphics[width=.7\textwidth]{histoY.png}
 			\centering
 			\label{fig:histoY}
 		\end{figure}
-		\begin{figure}
+		\begin{figure}[H]
 			\caption{Histogramme de projection horizontal}
 			\includegraphics[width=0.7\textwidth]{histoX1.png}
 			\centering
 			\label{fig:histoX1}
 		\end{figure}
-		\begin{figure}
+		\begin{figure}[H]
 			\caption{Histogramme de projection horizontal}
 			\includegraphics[width=.7\textwidth]{histoX2.png}
 			\centering
