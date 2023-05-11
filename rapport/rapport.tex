@@ -11,8 +11,9 @@
 \usepackage{algorithm2e}
 % \usepackage[open,openlevel=1]{bookmark}
 \usepackage[colorlinks=true,linkcolor=black,urlcolor=black,bookmarksopen=true,bookmarksnumbered=true]{hyperref}
-
 \usepackage{bookmark}
+\usepackage{blindtext}
+% \usepackage{biblatex}
 
 \RestyleAlgo{ruled}
 \graphicspath{ {./img/} }
@@ -53,7 +54,11 @@
 			\subsubsection{k-Nearest Neighbor}
 				Méthode statistique, il y a un plan avec plein d'objets qui forment des troupeaux, notre lettre est quelque part dans le plan, on trace un cercle autour, notre lettre est identifiée comme l'objet présent au plus grand nombre à l'intérieur du cercle.
 			\subsubsection{Template matching} 
-				En gros, comparaison de l'image avec la base de donnée entière à l'aide d'une fonction de distance. 
+				% En gros, comparaison de l'image avec la base de donnée entière à l'aide d'une fonction de distance. 
+				\paragraph{}
+					Cette approche est l'une des plus simple. Voici en quoi elle consiste :\\Nous allons partir d'une banque d'image de référence. À chaque fois que nous souhaitons classifier une nouvelle image, nous allons comparé cette nouvelle image avec toute nos images de référence à l'aide d'une simple fonction de distance euclidienne.
+				\paragraph{L'avantage} de cette solution est que nous n'avons pas besoin d'entrainer un modèle au préalable.
+				\paragraph{Le désavantage} est que cette technique est sensible aux rotations et aux déplacements dans l'image.%si la nouvelle image subit une rotation trop grande,
 		\subsection{Objectifs}
 			Notre but est de créer un logiciel pour tranformer une image qui contient des symboles en un texte numérique.\\
 			Initialement, nous nous concentrerons sur des images simples et de bonne qualité avec des symboles de l'alphabet latin (26 lettres) seulement en majuscules sur 1 ligne. Puis, si le temps nous le permet, on aggrandira la portée du problème.
@@ -80,6 +85,9 @@
 	\section{Technologies utilisées} 
 		\subsection{Langages et outils}
 			\subsubsection{Python3}
+				Python3 est un langage de programmation interprété, multiparadigme et multiplatformes.Il favorise la programmation impérative structurée, fonctionnelle et orientée objet. Il est doté d'un typage dynamique fort, d'une gestion automatique de la mémoire par ramasse-miettes et d'un système de gestion d'exceptions. (\url{https://fr.wikipedia.org/wiki/Python_(langage)})
+				% Test \cite{textbook}
+				% \cite{web:lang:python}
 			\subsubsection{OpenCV}
 				\begin{wrapfigure}{r}{0.15\textwidth}
 					\includegraphics[width=0.15\textwidth]{OpenCV.png}
@@ -98,8 +106,13 @@
 					\subparagraph{R-CNN}
 				\paragraph{}
 					You Only Look Once (YOLO) est une archicture de Réseau Neuronal Convolutif (CNN) de type "Region based" (R-CNN) qui est capable de localiser des objets dans une image et en même temps, les classifier.
-		\subsection*{test}
-			\blindtext
+		\subsection*{Justification}
+			\subsubsection*{Python3}
+				\paragraph{} En effet, ce langage est simple à comprendre et relativement facile à lire. De plus par ça popularité, de nombreuse librairies implémentes déjà ce dont nous avons besoin. Et si jamais nous rencontrons un problème, d'autres auront probablement déjà résolu le problème.
+			\subsubsection*{OpenCV}
+				\paragraph{} Effectivement, cette librairie dispose de nombreuse fonction qui nous sont utiles. De plus, elle est populaire, sous licence libre et développé par Intel.
+			\subsubsection*{You Only Look Once}
+				\paragraph{} YOLO est un réseau de neuronne convolutif moderne est performant implément de nombreuses innovation des dernières années.
 	\newpage
 	\section{Développements Logiciel : Conception, Modélisation, Implémentation}
 		\begin{figure}[h]
@@ -134,6 +147,8 @@
 				\item[•] Nombres de lignes de code : 
 				\item[•] Nombres de script
 			\end{itemize}
+		\subsection{Entrainement de YOLO}
+			TBD
 	\section{Algorithmes et Analyse}
 		\subsection{YOLO}
 		\subsection{Segmentation par histogramme de projection}
@@ -312,7 +327,8 @@
 %		YOLO : lettres minuscule, avec accents
 	\newpage
 	\section*{Bibliographie}
-		TBD
+		% \bibliographystyle{plain} % We choose the "plain" reference style
+		% \bibliography{refs} % Entries are in the refs.bib file
 	\newpage
 	\section*{Annexes}
 		\begin{figure}

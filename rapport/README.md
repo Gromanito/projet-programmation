@@ -7,12 +7,14 @@ pip install ultralytics
 pip install opencv-contrib-python
 
 sudo apt-get install texlive-lang-french
+sudo apt-get install texlive-bibtex-extra biber
 
 TODO
-1.3 Les différentetes approches
-2. Les tech utilisés
-3. Developpement logiciel
-4. Algo et analyse
+1. à refaire
+1.2 Les différentetes approches à développer
+2. Les tech utilisés ???
+3. Developpement logiciel à continuer
+4. Algo et analyse OK
 5. Analyse des résultats
 
 Le rapport a l'objectif de présenter le travail réalisé dans le cadre du projet de programmation.
