@@ -37,11 +37,6 @@ class FrameTraitementImage(ctk.CTkFrame):
 	conserverBoundingBox = False
 	angleOpti = 0
 
-
-	@classmethod
-	def changeAngleOpti(cls, valeur):
-		FrameTraitementImage.angleOpti=valeur
-
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		
@@ -104,6 +99,8 @@ class FrameTraitementImage(ctk.CTkFrame):
 
 		if self.typeBinarisation == 4:
 			FrameTraitementImage.conserverBoundingBox = True
+			self.angleRotation = FrameTraitementImage.angleOpti
+			self.spinbox.set(self.angleRotation)
 			self.imageModif = rotation(self.imageModif, self.angleRotation, True)
 			cv2.imwrite(FrameTraitementImage.cheminImageModif , self.imageModif)
 
@@ -218,11 +215,11 @@ class FrameTraitementImage(ctk.CTkFrame):
 
 	def rogner(self):
 
-		# if self.angleRotation != 0:
-		# 	self.imageModif = rotation(self.imageModif, self.angleRotation, FrameTraitementImage.conserverBoundingBox)
+		if self.angleRotation != 0:
+			self.imageModif = rotation(self.imageModif, self.angleRotation, FrameTraitementImage.conserverBoundingBox)
 		
 
-		hauteur, largeur, _= self.imageModif.shape
+		hauteur, _, _= self.imageModif.shape
 		
 
 		x0, x1, y0, y1 = int (self.sliderX0.get()), int(self.sliderX1.get()), int(self.sliderY0.get()), int(self.sliderY1.get())
@@ -239,16 +236,7 @@ class FrameTraitementImage(ctk.CTkFrame):
 		self.canvasPhotoModif.delete("all")
 		
 		self.imageModif= (self.imageModif[y0:y1, x0:x1])
-
-
 		if FrameTraitementImage.dicoTypeSeuil[self.choixTypeBin.get()] == 4:
-			FrameTraitementImage.angleOpti = 0
-			hauteurBin, largeurBin = self.imageBin.shape
-			x0= round((x0/hauteur)*hauteurBin )
-			x1= round((x1/hauteur)*hauteurBin )
-			y0= round((y0/largeur)*largeurBin )
-			y1= round((y1/largeur)*largeurBin )
-
 			self.imageBin = self.imageBin[y0:y1, x0:x1]
 
 		cv2.imwrite(FrameTraitementImage.cheminImageModif, self.imageModif)
@@ -314,8 +302,6 @@ class FrameTraitementImage(ctk.CTkFrame):
 		#faut aussi remettre la rotation à 0, et réinitialiser le rognage
 		self.spinbox.set(0) #on réinitialise la rotation au cas où
 		self.angleRotation = 0
-		with open("images/.angle.txt", "rb") as file:
-			FrameTraitementImage.angleOpti= file.read().decode()
 		cv.imwrite(FrameTraitementImage.cheminImageModif, cv2.imread("images/imageOriginale.png"))
 		if FrameTraitementImage.dicoTypeSeuil[self.choixTypeBin.get()] == 4:
 			self.imageModif = cv2.imread("images/imageOriginale.png")
@@ -363,12 +349,12 @@ class FrameTraitementImage(ctk.CTkFrame):
 
 		else:
 			if self.angleRotation != 0:
-				self.imageModif = rotation( cv2.imread(FrameTraitementImage.cheminImageModif)  , self.angleRotation + FrameTraitementImage.angleOpti, FrameTraitementImage.conserverBoundingBox)
+				self.imageModif = rotation( cv2.imread(FrameTraitementImage.cheminImageModif)  , self.angleRotation, FrameTraitementImage.conserverBoundingBox)
 				self.imageBin = cv2.imread(FrameTraitementImage.cheminImageBin, cv2.IMREAD_GRAYSCALE)
 				self.imageBin = binarisation (rotation(self.imageBin, self.angleRotation, FrameTraitementImage.conserverBoundingBox ), typeBinarisation=0 , Seuil=127, dejaNDG=True)
 			else:
 				self.imageBin = cv2.imread(FrameTraitementImage.cheminImageBin, cv2.IMREAD_GRAYSCALE)
-				self.imageModif = rotation(cv2.imread(FrameTraitementImage.cheminImageModif), FrameTraitementImage.angleOpti, FrameTraitementImage.conserverBoundingBox)
+				self.imageModif = cv2.imread(FrameTraitementImage.cheminImageModif)
 
 
 

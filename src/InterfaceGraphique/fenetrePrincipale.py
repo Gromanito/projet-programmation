@@ -13,7 +13,7 @@ from fenetreModifPhoto import FenetreModifPhoto
 from segmentation import segmentation
 from segmente import *
 from TraitementImage import *
-from FrameTraitementImage import FrameTraitementImage
+import FrameTraitementImage
 
 
 
@@ -91,9 +91,7 @@ class FenetrePrincipale(ctk.CTk):
 		angleOpti, imageBinDefaut = appliquerBinarisationParDefaut(imgAppPhoto)
 		cv2.imwrite("images/imageBinDefaut.png", imageBinDefaut)
 		cv2.imwrite("images/imageBin.png", imageBinDefaut)
-		with open("images/.angle.txt", "wb") as file:
-			file.write( str(angleOpti).encode() )
-		FrameTraitementImage.changeAngleOpti(angleOpti)
+		FrameTraitementImage.angleOpti = angleOpti
 
 
 		self.labelRenduPourYolo.actualiserImage(cv2.imread("images/imageBin.png"))
