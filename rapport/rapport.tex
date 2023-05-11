@@ -164,25 +164,26 @@
 				\KwData{image en RGB}
 				% \KwOut{output}
 				% \KwOut{output}
-				\Strat{D'abord, une segmentation des lignes par projection vertical. 
-				Puis, dans un 2e temps, segmentation des caractères grâce à une projection horizontal de chaque ligne individuellement}
-				\KwResult{\\Tableau de couples d'entier représentant les coordonnées y de début et de fin des lignes sur l'image
-        				\\Tableau de tableau de couple d'entier représentant les coordonnée x de début et de fin des lettres par lignes, 
+				\Strat{la segmentation se produit en deux temps. 
+				En premier, la segmentation des lignes avec la projection verticale, 
+				et par la suite la segmentation des caractères par la projection horizontale.}
+				\KwResult{\\Tableau de couples d'entier représentant les coordonnées en y de début et de fin des n des lignes sur l'image.
+        				\\Tableau de tableau de couple d'entier représentant les coordonnées en x de début et de fin des n lettres contenues dans chaque ligne.
         				\\Tableau d'image des lignes
-        				\\Tableau de tableau d'image des caractères}
+						\\Tableau de tableau d'image des caractères}
 				\BlankLine
 				$ndgImage \gets convertirImageEnNDG(image)$\;
 				\BlankLine
 				\tcc{on met l'image en noir et blanc sauf que le seuillage est inversé}
 				$imageBinaire \gets binarisationInversé(ndgImage)$\;
 				\BlankLine
-				\tcc{on fait la somme des pixels sur les colomnes et on les divise par 255}
+				\tcc{on fait la somme des pixels sur les colonnes et on les divise par 255}
 				$projectionHorizontale = (sommeValPixel(imageBinaire, axe=1)) / 255$\;
 				$delimitationDesLignes = coordonneeLigne(projectionHorizontal)$\;
 				\BlankLine
 				$imagesLignes = []$\;
 				\BlankLine
-				\tcc{on copie une zone de l'image correspondant à un caractère grâce aux coordonnées calculées\\et on l'ajoute à notre tableau d'image des lignes}
+				\tcc{on copie une zone de l'image correspondant à une ligne grâce aux coordonnées calculées\\et on l'ajoute à notre tableau d'image de lignes}
 				\For{(x,y) dans delimitationDesLignes}{imagesLignes.ajouter(ndgImage[x:y, 0:longeurImage])}
 				\BlankLine
 				\tcc{on initialise le tableau de tableaux des images de Caractère on fonction du nombre de ligne detecté}
@@ -194,7 +195,7 @@
 				\For(){index, uneLigne dans imagesLignes}
 				{
 					$ligneBinaire = binarisationInversé(uneLigne)$\;
-					\tcc{on fait la somme des pixels sur les lignes et on les divise par 255}
+					\tcc{on fait la somme des pixels sur les lignes de l'image et on les divise par 255}
 					$projectionVerticale = (sommeValPixel(imageBinaire, axe=0)) / 255$\;
 					$delimitationDesCaracteres = coordonneeCaractere(projectionVerticale)$\;
 					\BlankLine
@@ -205,7 +206,7 @@
 					{
 						$imagesCaracteres[index].ajouter(ndgImage[0:hauteurUneLigne, x:y])$\;
 					}
-					$redimensionnerImage(imagesCaracteres[index],hauteur = 128,longeur = 128)$\;
+					$redimensionnerImage(binarisation(imagesCaracteres[index],hauteur = 128,longeur = 128), seuil = 127)$\;
 					\BlankLine
 				}
 				\KwRet{$delimitationDesLignes,delimitationDesCaracteres,imagesLignes,imagesCaracteres$}
