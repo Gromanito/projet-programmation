@@ -20,12 +20,15 @@ def coordonneeLigne(myprojection):
     coord_ligne = []
     danslaligne = False
 
-    # on calcule les coordonnees de la delimitation des lignes
-    
+    # on calcule les coordonnees de la delimitation des lignes  
     coordDF = []
     for i, value in enumerate(myprojection):
         if value!=0:
-            if not danslaligne or (danslaligne and i == len(myprojection)-1): coordDF.append(i)
+            if not danslaligne or (danslaligne and i == len(myprojection)-1): 
+                coordDF.append(i)
+                if i == len(myprojection)-1 and len(coordDF)%2!=0:
+                    coordDF.pop(-1)
+                
             danslaligne = True
         else : 
             if danslaligne : coordDF.append(i)
@@ -49,21 +52,23 @@ def segmentLigne(image,width,coord_ligne):
 def coordonneeCaractere(myprojection):
 
     # on calcule les coordonnees de la delimitation des caracteres
-    
     danslecaractere = False
     coordDF = []
     for i, value in enumerate(myprojection):
         if value!=0:
-            if not danslecaractere or (danslecaractere and i == len(myprojection)-1): coordDF.append(i)
+            if not danslecaractere or (danslecaractere and i == len(myprojection)-1): 
+                coordDF.append(i)
+                if i == len(myprojection)-1 and len(coordDF)%2!=0:
+                    coordDF.pop(-1)
             danslecaractere = True
         else : 
             if danslecaractere : coordDF.append(i)
             danslecaractere=False
-
-    # on cheque si les espaces entre les lettres sont cohérantes
-    lettres = [(coordDF[i],coordDF[i+1]) for i in range(0, len(coordDF),+2)]
-    espaceEntreLettre = [lettres[i+1][0]-lettres[i][1] for i in range(len(lettres)-1)]
     
+    lettres = [(coordDF[i],coordDF[i+1]) for i in range(0, len(coordDF),+2)]
+    
+    # on cheque si les espaces entre les lettres sont cohérantes
+    espaceEntreLettre = [lettres[i+1][0]-lettres[i][1] for i in range(len(lettres)-1)]
     listePoidsEspace = espaceEntreLettre.copy()
     listePoidsEspace.sort() 
     listePoidsEspace = [x * (len(listePoidsEspace)-i) for i, x in enumerate(listePoidsEspace)]
@@ -75,12 +80,42 @@ def coordonneeCaractere(myprojection):
             F = lettres.pop(j)
             lettres.insert(j,(D[0],F[1]))
             espaceEntreLettre.pop(0)
-            # j += 1 En fait c'était ça le probleme 
         else :
-            espaceEntreLettre.pop(0)
             j += 1
+            espaceEntreLettre.pop(0)
 
     return lettres
+
+def trillageCaractere(img_lettres):
+    moyenneHauteurLettres = 0
+
+    # on calcule la hauteur des lettres grâce à la projection vertical 
+    for i,img_l in enumerate(img_lettres):
+        listeHauteurLettres = []
+        nombreDeLettre = len(img_l)
+        
+        for img in img_l:
+            hauteurLettre = 0
+            _, threshold_image = cv2.threshold(img, 125, 255, cv2.THRESH_BINARY_INV)
+
+            # on calcule l'histogramme vertical de chaque lettre
+            horizontal_pixel_sum = np.sum(threshold_image, axis=1)
+            myprojection = horizontal_pixel_sum / 255
+
+            # si une ligne n'est pas entièrement blanche on ajoute (MHL+=1)/nbrLettres
+            for x in myprojection:
+                if x != 0: 
+                    hauteurLettre += 1
+            moyenneHauteurLettres += hauteurLettre/nombreDeLettre
+            listeHauteurLettres.append(hauteurLettre)
+        
+        # on évalue si la hauteur de la lettre est pertinante si non on supprime l'image de la lettre 
+        for j in range(len(img_lettres[i])-1,-1,-1):
+            if listeHauteurLettres[j]<moyenneHauteurLettres*0.2:
+                img_lettres[i].pop(j)
+    
+    return img_lettres
+
 
 # retourne coord_line [(deb1,fin1),(deb2,fin2)...], img_ligne sous forme [line1,line2,...], coord_caractere[[(deb11,fin11),(deb12,fin12)],[...],...], img_caract sous forme [[caracLigne1,...],[caracLigne2,...]]
 def segmentation(image): 
@@ -98,25 +133,19 @@ def segmentation(image):
     coord_ligne = coordonneeLigne(myprojectiony)
 
     # on segmente l'image pour avoir des images contenant une ligne 
-    img_ligne = segmentLigne(gray_scale,width,coord_ligne)
-
-    # -----JUSTE DES LIGNES DE CODE POUR SAVE LES LIGNES-----
-    # for i, img in enumerate(img_ligne):
-    #     nomImg = "line/line" + str(i) + ".png"
-    #     cv2.imwrite(nomImg, img)    
+    img_ligne = segmentLigne(gray_scale,width,coord_ligne)  
 
     # --------SEPARATION DES CARACTERES----------
-
     img_caractere = [[] for i in range(len(img_ligne))]
     coord_caracteres_ligne = [[] for i in range(len(img_ligne))]
 
     for i, ligne in enumerate(img_ligne):
         
         # je recupere les dimensions de l'image de la ligne
-        height_line, width_line = ligne.shape
+        height_line, _ = ligne.shape
         # on inverse les couleurs
         _, img_threshold = cv2.threshold(ligne, 125, 255, cv2.THRESH_BINARY_INV)
-    
+
         # on cree l'histogramme de la ligne
         
         vertical_pixel_sum = np.sum(img_threshold, axis=0)
@@ -124,22 +153,22 @@ def segmentation(image):
 
         # on calcule les coordonnees de la delimitaion des caracteres
         coord_caracteres = coordonneeCaractere(myprojectionx)
-
         coord_caracteres_ligne[i].append(coord_caracteres)
 
-    # on segmente l'image pour separer les caracteres
+        # on segmente l'image pour separer les caracteres
         for j in range(len(coord_caracteres)):
-            _, uncaractere = cv2.threshold(ligne[0:height_line, coord_caracteres[j][0]:coord_caracteres[j][1]], 125, 255, cv2.THRESH_BINARY)
-            img_caractere[i].append(uncaractere)
+            uncaractere = ligne[0:height_line, coord_caracteres[j][0]:coord_caracteres[j][1]]
+            _, uncaractereBI = cv2.threshold(ligne[0:height_line, coord_caracteres[j][0]:coord_caracteres[j][1]], 125, 255, cv2.THRESH_BINARY)
+            img_caractere[i].append(uncaractereBI)
+        
+    # on vérifie la pertinance des images de lettre générées
+    img_caractere = trillageCaractere(img_caractere)
 
     # on donne une dimension de 128x128 aux caractères 
     for i in range (len(img_caractere)):
         for j in range (len(img_caractere[i])):
-
-            img_caractere[i][j] = cv2.resize(src=img_caractere[i][j], dsize=(128, 128), interpolation = cv.INTER_NEAREST_EXACT)
-            _, img_caractere[i][j] = cv.threshold(img_caractere[i][j], 10, 255, cv.THRESH_BINARY) # on seuil prck ptre que ça floute de resize
-
-
+            img_caractere[i][j] = cv2.resize(src=img_caractere[i][j], dsize=(128, 128), interpolation=cv2.INTER_NEAREST_EXACT)
+            _, img_caractere[i][j] = cv2.threshold(img_caractere[i][j], 10, 255, cv2.THRESH_BINARY) # on seuil prck ptre que ça floute de resize
     
     return coord_ligne, img_ligne, coord_caracteres_ligne, img_caractere
 
