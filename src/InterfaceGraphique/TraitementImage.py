@@ -374,8 +374,8 @@ def segmentationLigneRomain(image):
 
 	#on considère que les lignes en dessous de ligneMax sont des espaces, on regarde que ces lignes pour l'instant
 
-	for row in range (0, image.shape[0]-4 ):
-		moyenneDesCinqLignes = sum([proj[row+i]  for i in range(5)]) / 5
+	for row in range (0, image.shape[0]-9 ):
+		moyenneDesCinqLignes = sum([proj[row+i]  for i in range(10)]) / 10
 		if moyenneDesCinqLignes > moyenne * 0.15: # on vient de trouver une candidate
 			if not enTrainDeLireUneLigne:
 				enTrainDeLireUneLigne = True
@@ -464,7 +464,7 @@ def segmentationLettreRomain(image):
 
 
 	total = np.sum(proj)
-	moyenne = (total/proj.shape[0] ) * 0.05
+	moyenne = (total/proj.shape[0] ) * 0.1
 
 	#on fait un premier passage où on récupère QUE les lignes qui sont potentiellement des lettres (au dessus de la moyenne)
 	#on recompte le nombre de ces potentielles lettres pour faire une moyenne sur le nombre de pixel de ces lettres
@@ -544,6 +544,9 @@ def segmentationLettreRomain(image):
 	# idée pour les reconnaitre: si c'est la meme lettre l'espacement qu'il y a entre les 2 composantes
 	# est très faible comparé à l'espacement à gauche et à droite, on regarde pour chaque couple de lettre 
 	# si l'espacement est grand ou pas comparé 
+
+
+	
 
 
 

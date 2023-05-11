@@ -1,1 +1,11 @@
-**/__pycache/
+**/__pycache__/
+images/imageSegmentee/**
+images/imageBin.png
+images/imageBinDefaut.png
+images/imageModif.png
+images/imageOriginale.png
+ApresMasque.png
+avantMasque.png
+seuillageAda.png
+seuillageSau.png
+/images/.angle.txt

@@ -178,25 +178,26 @@ Ensuite, et en se basant sur l'analyse de l'image de projection de l'histogramme
 				\KwData{image en RGB}
 				% \KwOut{output}
 				% \KwOut{output}
-				\Strat{D'abord, une segmentation des lignes par projection vertical. 
-				Puis, dans un 2e temps, segmentation des caractères grâce à une projection horizontal de chaque ligne individuellement}
-				\KwResult{\\Tableau de couples d'entier représentant les coordonnées y de début et de fin des lignes sur l'image
-        				\\Tableau de tableau de couple d'entier représentant les coordonnée x de début et de fin des lettres par lignes, 
+				\Strat{la segmentation se produit en deux temps. 
+				En premier, la segmentation des lignes avec la projection verticale, 
+				et par la suite la segmentation des caractères par la projection horizontale.}
+				\KwResult{\\Tableau de couples d'entier représentant les coordonnées en y de début et de fin des n des lignes sur l'image.
+        				\\Tableau de tableau de couple d'entier représentant les coordonnées en x de début et de fin des n lettres contenues dans chaque ligne.
         				\\Tableau d'image des lignes
-        				\\Tableau de tableau d'image des caractères}
+						\\Tableau de tableau d'image des caractères}
 				\BlankLine
 				$ndgImage \gets convertirImageEnNDG(image)$\;
 				\BlankLine
 				\tcc{on met l'image en noir et blanc sauf que le seuillage est inversé}
 				$imageBinaire \gets binarisationInversé(ndgImage)$\;
 				\BlankLine
-				\tcc{on fait la somme des pixels sur les colomnes et on les divise par 255}
+				\tcc{on fait la somme des pixels sur les colonnes et on les divise par 255}
 				$projectionHorizontale = (sommeValPixel(imageBinaire, axe=1)) / 255$\;
 				$delimitationDesLignes = coordonneeLigne(projectionHorizontal)$\;
 				\BlankLine
 				$imagesLignes = []$\;
 				\BlankLine
-				\tcc{on copie une zone de l'image correspondant à un caractère grâce aux coordonnées calculées\\et on l'ajoute à notre tableau d'image des lignes}
+				\tcc{on copie une zone de l'image correspondant à une ligne grâce aux coordonnées calculées\\et on l'ajoute à notre tableau d'image de lignes}
 				\For{(x,y) dans delimitationDesLignes}{imagesLignes.ajouter(ndgImage[x:y, 0:longeurImage])}
 				\BlankLine
 				\tcc{on initialise le tableau de tableaux des images de Caractère on fonction du nombre de ligne detecté}
@@ -208,7 +209,7 @@ Ensuite, et en se basant sur l'analyse de l'image de projection de l'histogramme
 				\For(){index, uneLigne dans imagesLignes}
 				{
 					$ligneBinaire = binarisationInversé(uneLigne)$\;
-					\tcc{on fait la somme des pixels sur les lignes et on les divise par 255}
+					\tcc{on fait la somme des pixels sur les lignes de l'image et on les divise par 255}
 					$projectionVerticale = (sommeValPixel(imageBinaire, axe=0)) / 255$\;
 					$delimitationDesCaracteres = coordonneeCaractere(projectionVerticale)$\;
 					\BlankLine
@@ -219,7 +220,7 @@ Ensuite, et en se basant sur l'analyse de l'image de projection de l'histogramme
 					{
 						$imagesCaracteres[index].ajouter(ndgImage[0:hauteurUneLigne, x:y])$\;
 					}
-					$redimensionnerImage(imagesCaracteres[index],hauteur = 128,longeur = 128)$\;
+					$redimensionnerImage(binarisation(imagesCaracteres[index],hauteur = 128,longeur = 128), seuil = 127)$\;
 					\BlankLine
 				}
 				\KwRet{$delimitationDesLignes,delimitationDesCaracteres,imagesLignes,imagesCaracteres$}
@@ -244,7 +245,12 @@ Ensuite, et en se basant sur l'analyse de l'image de projection de l'histogramme
 					\If{$T[i] \neq 0$}{
 						\If{!dansLeCaractere \textbf{or} (dansLeCaractere  \textbf{and} i == taille(T)-1)} {
 							$DF.ajouter(i)$\;
+							\If{i == taille(myprojection)-1 et taille(DF) mod 2 != 0} {
+								$supprimer(DF[taille(DF)-1])$\;
+							}
 						}
+						if i == len(myprojection)-1 and len(coordDF)%2!=0:
+                    coordDF.pop(-1)
 						$dansLeCaractere = True$\;
 					}
 					\Else{
@@ -256,26 +262,29 @@ Ensuite, et en se basant sur l'analyse de l'image de projection de l'histogramme
 				}
 				lettres $\gets$ [ (DF[i],DF[i+1]) pour i de 0 à taille(DF) avec un pas de 2 ]\;
 				\BlankLine
-				$tailleEspacesEntrelettres = [ lettres[i+1][0]-lettres[i][1] pour i de 0 à taille(lettres)-1 ]$\;
-				$poidsEspace = trillageCroissant(tailleEspacesEntrelettres)$\;
-				\BlankLine
-				$SommeIndice \gets 0$\;
-				\For{i de 0 à taille(poidsEspace)-1}
+				\If{taille(lettres)>1}
 				{
-					$poidsEspace[i] \gets poidsEspace[i] * (taille(poidsEspace)-i)$\;
-				    $SI \gets SI + i$\;
-				}
-				$moyenneEspaces \gets somme(poidsEspace) / SI$\;
-				$j \gets 0$\;
-				\While{tailleEspacesEntrelettres != []}
-				{
-					\If{$tailleEspacesEntrelettres < moyenneEspaces*0.2$} {
-						$D = lettres[j];$ $supprimer(lettres[j])$\;
-						$F = lettres[j];$ $supprimer(lettres[j]);$\;
-						\tcc{inserer(tableau, indice, élément)}
-						$inserer(lettres,j,(D[0],F[1]))$\;
-					}	\lElse{$j \gets j+1$}
-					$supprimer(tailleEspacesEntrelettres[0])$\;
+					$tailleEspacesEntrelettres = [ lettres[i+1][0]-lettres[i][1] pour i de 0 à taille(lettres)-1 ]$\;
+					$poidsEspace = trillageCroissant(tailleEspacesEntrelettres)$\;
+					\BlankLine
+					$SommeIndice \gets 0$\;
+					\For{i de 0 à taille(poidsEspace)-1}
+					{
+						$poidsEspace[i] \gets poidsEspace[i] * (taille(poidsEspace)-i)$\;
+						$SI \gets SI + i$\;
+					}
+					$moyenneEspaces \gets somme(poidsEspace) / SI$\;
+					$j \gets 0$\;
+					\While{tailleEspacesEntrelettres != []}
+					{
+						\If{$tailleEspacesEntrelettres < moyenneEspaces*0.2$} {
+							$D = lettres[j];$ $supprimer(lettres[j])$\;
+							$F = lettres[j];$ $supprimer(lettres[j]);$\;
+							\tcc{inserer(tableau, indice, élément)}
+							$inserer(lettres,j,(D[0],F[1]))$\;
+						}	\lElse{$j \gets j+1$}
+						$supprimer(tailleEspacesEntrelettres[0])$\;
+					}
 				}
 				\KwRet{lettres}
 			\end{algorithm}
