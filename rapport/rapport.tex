@@ -243,26 +243,29 @@
 				}
 				lettres $\gets$ [ (DF[i],DF[i+1]) pour i de 0 à taille(DF) avec un pas de 2 ]\;
 				\BlankLine
-				$tailleEspacesEntrelettres = [ lettres[i+1][0]-lettres[i][1] pour i de 0 à taille(lettres)-1 ]$\;
-				$poidsEspace = trillageCroissant(tailleEspacesEntrelettres)$\;
-				\BlankLine
-				$SommeIndice \gets 0$\;
-				\For{i de 0 à taille(poidsEspace)-1}
+				\If{taille(lettres)>1}
 				{
-					$poidsEspace[i] \gets poidsEspace[i] * (taille(poidsEspace)-i)$\;
-				    $SI \gets SI + i$\;
-				}
-				$moyenneEspaces \gets somme(poidsEspace) / SI$\;
-				$j \gets 0$\;
-				\While{tailleEspacesEntrelettres != []}
-				{
-					\If{$tailleEspacesEntrelettres < moyenneEspaces*0.2$} {
-						$D = lettres[j];$ $supprimer(lettres[j])$\;
-						$F = lettres[j];$ $supprimer(lettres[j]);$\;
-						\tcc{inserer(tableau, indice, élément)}
-						$inserer(lettres,j,(D[0],F[1]))$\;
-					}	\lElse{$j \gets j+1$}
-					$supprimer(tailleEspacesEntrelettres[0])$\;
+					$tailleEspacesEntrelettres = [ lettres[i+1][0]-lettres[i][1] pour i de 0 à taille(lettres)-1 ]$\;
+					$poidsEspace = trillageCroissant(tailleEspacesEntrelettres)$\;
+					\BlankLine
+					$SommeIndice \gets 0$\;
+					\For{i de 0 à taille(poidsEspace)-1}
+					{
+						$poidsEspace[i] \gets poidsEspace[i] * (taille(poidsEspace)-i)$\;
+						$SI \gets SI + i$\;
+					}
+					$moyenneEspaces \gets somme(poidsEspace) / SI$\;
+					$j \gets 0$\;
+					\While{tailleEspacesEntrelettres != []}
+					{
+						\If{$tailleEspacesEntrelettres < moyenneEspaces*0.2$} {
+							$D = lettres[j];$ $supprimer(lettres[j])$\;
+							$F = lettres[j];$ $supprimer(lettres[j]);$\;
+							\tcc{inserer(tableau, indice, élément)}
+							$inserer(lettres,j,(D[0],F[1]))$\;
+						}	\lElse{$j \gets j+1$}
+						$supprimer(tailleEspacesEntrelettres[0])$\;
+					}
 				}
 				\KwRet{lettres}
 			\end{algorithm}
