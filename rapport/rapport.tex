@@ -42,9 +42,11 @@
 	\section{Présentation du Sujet } 
 		\subsection{La problématique}
 			\paragraph{}
-				La reconnaissance de l'écriture manuscrite consiste à traduire un texte manuscrit en un texte numérique, interprétable par l'ordinateur. Bien que cette application est utilisé dans divers domaine, la reconnaissance de l'écriture manuscrite est toujours considéré comme un problème ???. La variation des styles d'écritures manuscrites d'une personne à l'autre et la mauvaise qualité du texte pose des obstacles importants à sa convertion en texte numérique.
-				%  Ce traitement peut être utilisé dans le traitement des chèques dans les banques, traitement de formulaires, résolutions d'adresse postales sur des lettres.
-
+				La reconnaissance de l'écriture manuscrite consiste à traduire un texte manuscrit en un texte numérique, interprétable par l'ordinateur. Bien que cette application commence à être utilisé dans différents secteurs, 
+				la variation des styles d'écritures manuscrites d'une personne à l'autre et la mauvaise qualité du texte pose des défis importants pour leurs numérisations.% manuscrits en texte numérique.%  convertion en texte numérique.
+\\Les méthodes classiques étudiés auparravant ou présenté dans la littérature, nottemment l'amélioration de la qualité d'images (filtres, etc) ou la reconnaissance des formes complexes, peuvent ne pas répondre à ce type de problématique.
+\\Ainsi dans ce projet, nous allons explorer un autre axe de recherche basé sur les méthodes de réseaux de neuronnes qui on prouvait leur efficacité à reconnaître et classifier les formes les plus complexes.
+\\Cette recherche vas nous permettre de mettre en oeuvre nos compétences en traitement d'image et d'explorer de nouvelle méthodes plus avancé.
 
 			% L'essence du problème est qu'un texte dans un document est très diffrent d'une photo du même document. Dans le 1er cas, le format rend le contenu comprehensible par un ordinateur, il peut donc 
 			% chercher un mot dans le texte ou le modifier pour corriger des fautes d'orthographe. Dans le 2e cas, l'image représente la même chose. MAIS, la machine ne comprend le sens de l'information 
@@ -55,7 +57,7 @@
 			Ce problème est particulièrement intéressant. En effet, un projet sur le traitement automatique de l'information numérique est exactement ce que des étudiants en informatique devraient faire. Nous avons pu constater une explosion
 			de l'intelligence artificielle ces dernières années. Notamment les réseaux neuronaux. À l'heure actuel, ils sont capables de detecter des objets et de les classifier. Ce projet est tout à fait 
 			intéressant pour de futurs étudiants en master IASD.
-		\subsection{Les différentes approches}
+		\subsection{Quelques approches de reconnaissance de formes}
 			\subsubsection{k-Nearest Neighbor}
 				Méthode statistique, il y a un plan avec plein d'objets qui forment des troupeaux, notre lettre est quelque part dans le plan, on trace un cercle autour, notre lettre est identifiée comme l'objet présent au plus grand nombre à l'intérieur du cercle.
 			\subsubsection{Template matching} 
@@ -64,9 +66,11 @@
 					Cette approche est l'une des plus simple. Voici en quoi elle consiste :\\Nous allons partir d'une banque d'image de référence. À chaque fois que nous souhaitons classifier une nouvelle image, nous allons comparé cette nouvelle image avec toute nos images de référence à l'aide d'une simple fonction de distance euclidienne.
 				\paragraph{L'avantage} de cette solution est que nous n'avons pas besoin d'entrainer un modèle au préalable.
 				\paragraph{Le désavantage} est que cette technique est sensible aux rotations et aux déplacements dans l'image.%si la nouvelle image subit une rotation trop grande,
+			\subsubsection{Les réseaux de neuronnes} 
+				Les réseaux de neuronnes
 		\subsection{Objectifs}
-			Notre but est de créer un logiciel pour tranformer une image qui contient des symboles en un texte numérique.\\
-			Initialement, nous nous concentrerons sur des images simples et de bonne qualité avec des symboles de l'alphabet latin (26 lettres) seulement en majuscules sur 1 ligne. Puis, si le temps nous le permet, on aggrandira la portée du problème.
+			Notre objectif est de proposer une méthode pour convertir une image de texte manuscrit en un texte numérique.\\
+			Dans notre étude nous allons considéré 26 lettres de l'alphabet latin en majuscules et présenter des résultats préliminaires
 		\subsection{Cahier des charges}
 			\subsubsection{Besoins et contraintes}
 				\paragraph{Les besoins}
@@ -136,15 +140,25 @@
 				\label{fig:modif}
 			\end{figure}
 			\paragraph{}
-				Après avoir entrer une image, il est possible qu'il y ait beaucoup de bruit, dans ce cas là, nous pouvons rogner l'image pour enlever des ombres sur les bords, faire des rotations et filtrer pour enlever le bruit comme illustrée sur la figure \ref{fig:modif}
+				Après avoir entrer une image (figure 2 A), une étape de préprocessing (découpage) peut-être établi pour réduire le bruit concentrer sur les bords de l'image et causé par la lumière .
+				L'image résultat est convertie après en image binaire réalisé avec un seuil adapté. Puis, les pixels noirs et blancs ont été inversé pour facilité la segmentation des images.
+				%il est possible qu'il y ait beaucoup de bruit, dans ce cas là, nous pouvons rogner l'image pour enlever des ombres sur les bords, faire des rotations et filtrer pour enlever le bruit comme illustrée sur la figure \ref{fig:modif}
 			\begin{figure}[H]
 				\caption{Fenêtre de l'IHM après présentation des charactères reconnus}
 				\includegraphics[width=0.8\textwidth]{recon.png}
 				\centering
 				\label{fig:recon}
 			\end{figure}
-			\paragraph{}Sur la figure \ref{fig:recon}, on peut voir qu'après avoir obtenu une image de bonne qualité, notre programme va segmenter les charactères, en faire des imagettes et donner ces imagettes individuellement à YOLO. Ensuite après cette reconnaissance, l'IHM présente le résultat.
-			\paragraph{}Il est possible de voir les imagettes générées dans le dossier "./images/imageSegmentee"
+			\paragraph{} Après établir le prétraitement détaillé ci-dessus, on va procéder a la segmentation des caractères.
+			% \paragraph{} La segmentation des caractères 
+			% \paragraph{}Notre programme va segmenter les charactères, en faire des imagettes et donner ces imagettes individuellement à YOLO. Ensuite après cette reconnaissance, l'IHM présente le résultat.
+			\paragraph{} Dans un premier temps, une projection d'histogramme vertical de l'image binaire est calculée ; cette projection d'histogramme vertical correspond à un vecteur de taille égale à la largeur de l'image et sommant les pixels blancs et noirs par colonne.% Par la suite, nous avons écrit une fonction pour créer une image pour l'histogramme précédent.
+Les images d'entrée sont généralement bruitées, ce qui provoque l'apparition de quelques petits pics indésirables dans l'image de l'histogramme de projection. Afin de supprimer cet effet de bruit et de supprimer ces pics, nous avons créé une fonction de seuillage.
+Ensuite, et en se basant sur l'analyse de l'image de projection de l'histogramme vertical, nous avons fait
+écrire une fonction pour compter le nombre de caractères et les localiser. Le critère de détection est basé sur la succession de projections nulles et non nulles. En sortie, nous avons le nombre de caractères et les coordonnées (début, fin) de chacun. Par conséquent, nous implémentons la fonction qui réalise la segmentation du mot entier.
+			% relire et reformuler
+			
+			% \paragraph{}Il est possible de voir les imagettes générées dans le dossier "./images/imageSegmentee"
 		\subsection{Procédures de lecture et validation des entrées}
 			beep	
 		\subsection{Statistiques}
@@ -286,9 +300,9 @@
 					\includegraphics[width=0.35\textwidth]{structDonnee.png}
 					\label{fig:structDonnee}
 			\end{wrapfigure}
-			\paragraph{} Grâce à une projection vertical, nous obtenons ce tableau (voir figure \ref{fig:structDonnee}). La 1er ligne de ce tableau contient autant de tuples que le nombre de lignes. Chaque tuples contient la commposante en ordonnée du début et de la fin d'une ligne. En choississant arbitrairement comme largeur d'une ligne, la largeur de l'image, on extrait nos 2 lignes comme sur la figure \ref{fig:imageLignes}.
+			\paragraph{} Grâce à une projection vertical, nous obtenons ce tableau (voir figure \ref{fig:structDonnee}). La 1er ligne de ce tableau contient autant de tuples que le nombre de lignes. Chaque tuples contient la composante en ordonnée du début et de la fin d'une ligne. En choississant arbitrairement comme largeur d'une ligne, la largeur de l'image, on extrait nos 2 lignes comme sur la figure \ref{fig:imageLignes}.
 			\paragraph{} Maintenant que nous avons isoler les lignes, nous allons maintenant découper les lettres de chaque lignes en suivant l'algorithme n°\ref{alg:coordcar} page \pageref{alg:coordcar}
-			\paragraph{} Étant donnée que l'image est filtré, en noir et blanc et binairisé, lorsqu'une lettre est présente à un endroit donnée, cela signifie que sur la projection vertical, l'histogramme est supérieur à 0 à cet endroit là. Sinon, il n'y a pas de lettre et l'histogramme est à 0. L'algorithme n°\ref{alg:coordcar} va parcourir totalement l'histogramme de projection et va tenté de dectecter ces "zones pleines" et récupérer l'indice de début et de fin de ces zones qui correspondront à la limite gauche et droit de la lettre sur l'image. Nous pouvons voir le résultats de cette fonction sur la figure \ref{fig:structDonnee} et des histogrammes de projection horizontal dans l'annexe (page \pageref{fig:histoX1}).
+			\paragraph{} Étant donnée que l'image est filtré, en noir et blanc et binairisé, lorsqu'une lettre est présente à un endroit donnée, cela signifie que sur la projection vertical, l'histogramme est supérieur à 0 à cet endroit là. Sinon, il n'y a pas de lettre et l'histogramme est à 0. L'algorithme n°\ref{alg:coordcar} va parcourir totalement l'histogramme de projection et va tenté de dectecter les pics et récupérer l'indice de début et de fin de ces zones qui correspondront à la limite gauche et droit de la lettre sur l'image. Nous pouvons voir le résultats de cette fonction sur la figure \ref{fig:structDonnee} et des histogrammes de projection horizontal dans l'annexe (page \pageref{fig:histoX1}).
 			\begin{figure}
 				\caption{Imagettes des charactères crée à partir de la 1e ligne}
 				\includegraphics[scale=.3]{segmentation_F.png}
