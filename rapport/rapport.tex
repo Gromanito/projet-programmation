@@ -231,7 +231,12 @@
 					\If{$T[i] \neq 0$}{
 						\If{!dansLeCaractere \textbf{or} (dansLeCaractere  \textbf{and} i == taille(T)-1)} {
 							$DF.ajouter(i)$\;
+							\If{i == taille(myprojection)-1 et taille(DF) mod 2 != 0} {
+								$supprimer(DF[taille(DF)-1])$\;
+							}
 						}
+						if i == len(myprojection)-1 and len(coordDF)%2!=0:
+                    coordDF.pop(-1)
 						$dansLeCaractere = True$\;
 					}
 					\Else{
