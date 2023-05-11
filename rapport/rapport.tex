@@ -149,13 +149,13 @@
 				\centering
 				\label{fig:recon}
 			\end{figure}
-			\paragraph{} Après établir le prétraitement détaillé ci-dessus, on va procéder a la segmentation des caractères.
+			\paragraph{} Après avoir établi le prétraitement détaillé ci-dessus, on va procéder à la segmentation des caractères.
 			% \paragraph{} La segmentation des caractères 
 			% \paragraph{}Notre programme va segmenter les charactères, en faire des imagettes et donner ces imagettes individuellement à YOLO. Ensuite après cette reconnaissance, l'IHM présente le résultat.
-			\paragraph{} Dans un premier temps, une projection d'histogramme vertical de l'image binaire est calculée ; cette projection d'histogramme vertical correspond à un vecteur de taille égale à la largeur de l'image et sommant les pixels blancs et noirs par colonne.% Par la suite, nous avons écrit une fonction pour créer une image pour l'histogramme précédent.
-Les images d'entrée sont généralement bruitées, ce qui provoque l'apparition de quelques petits pics indésirables dans l'image de l'histogramme de projection. Afin de supprimer cet effet de bruit et de supprimer ces pics, nous avons créé une fonction de seuillage.
-Ensuite, et en se basant sur l'analyse de l'image de projection de l'histogramme vertical, nous avons fait
-écrire une fonction pour compter le nombre de caractères et les localiser. Le critère de détection est basé sur la succession de projections nulles et non nulles. En sortie, nous avons le nombre de caractères et les coordonnées (début, fin) de chacun. Par conséquent, nous implémentons la fonction qui réalise la segmentation du mot entier.
+			\paragraph{} Dans un premier temps, une projection horizontale de histogramme de l'image binaire est calculée afin de segmenter les lignes de texte présentes dessus; cette projection de l'histogramme correspond à un vecteur de taille égale à la largeur de l'image et sommant le nombre de pixels noir sur une ligne.% Par la suite, nous avons écrit une fonction pour créer une image pour l'histogramme précédent.
+Les images d'entrée sont ne sont pas toujours parfaite, ce qui provoque l'apparition d'anomalies dans la projection, pouvant ainsi fausser l'analyse de l'image. Face à ce problème, nous avons créé des fonctions permettant de reconnaître et de supprimer ces anomalies que ce soit dans la partie segmentation des lignes ou des caractères.
+Ensuite, après segmentation des lignes et en se basant sur l'analyse de la projection verticale de l'histogramme de celles-ci, nous avions implémenté des fonctions permettant la localisation et la segmentation des caractères présents dans les lignes. 
+Le critère de détection est basé sur la succession de projections nulles et non nulles. En sortie, nous optenons l'image de chaque caractère et de chaque ligne.
 			% relire et reformuler
 			
 			% \paragraph{}Il est possible de voir les imagettes générées dans le dossier "./images/imageSegmentee"
