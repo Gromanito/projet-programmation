@@ -124,7 +124,7 @@
 				\newline
 			\subsubsection{You Only Look Once}
 				\paragraph{}
-				You Only Look Once (YOLO) est une archicture de Réseau Neuronal Convolutif (CNN) de type "Region based" (R-CNN) qui est capable de localiser des objets dans une image et, en même temps, de les classifier.
+				You Only Look Once (YOLO) est une archicture de Réseau Neuronal Convolutif (CNN) qui est capable de localiser des objets dans une image et, en même temps, de les classifier.
 
 				\paragraph{Les réseaux de neurones}
 					Les réseaux de neurone simulent plus ou moins le fonctionnement du cerveau humain. Ils sont constitués d'une multitude de neurones interconnectés entre eux qui reçoivent et renvoient des informations.
@@ -138,18 +138,9 @@
 					Contrairement aux réseaux de neurones traditionnels, qui utilisent des connexions denses entre les neurones des couches adjacentes, les CNN utilisent des couches de convolution qui appliquent des filtres pour extraire des caractéristiques importantes de l'image.
 					Cette opération permet d'extraire des motifs et des formes à différentes échelles et positions de l'image.
 					Les couches de sortie du CNN sont des couches denses classiques qui combinent les informations extraites par les couches précédentes pour produire une sortie finale, telle que la classe de l'objet présent dans l'image.
-					\subparagraph{Region Based CNN}
 
+					\subparagraph{} YOLO est connu pour sa grande précision et ses bonnes performances dans la détection des objets dans une scène. Etant donné que nous localisons déjà les lettres dans notre image, nous n'utiliserons cependant que les fonctionnalités de classification de YOLO, qui nous suffisent amplement.
 
-					\subparagraph{} YOLO 
-
-		\subsection*{Justification}
-			\subsubsection*{Python3}
-				\paragraph{} En effet, ce langage est simple à comprendre et relativement facile à lire. De plus par ça popularité, de nombreuse bibliothèques implémentes déjà ce dont nous avons besoin. Et si jamais nous rencontrons un problème, d'autres auront probablement déjà résolu le problème.
-			\subsubsection*{OpenCV}
-				\paragraph{} Effectivement, cette bibliothèque dispose de nombreuse fonction qui nous sont utiles. De plus, elle est populaire, sous licence libre et développé par Intel.
-			\subsubsection*{You Only Look Once}
-				\paragraph{} YOLO est un réseau de neuronne convolutif moderne est performant implément de nombreuses innovation des dernières années.
 	\newpage
 	\section{Développements Logiciel : Conception, Modélisation, Implémentation}
 		\begin{figure}[h]
@@ -158,6 +149,8 @@
 			\centering
 			\label{fig:useCaseDiagram}
 		\end{figure}
+
+
 		\subsection{Interface Homme-Machine}
 			L'IHM nous permet de prendre des photos avec une webcam connectée à l'ordinateur ou choisir à partir d'une fenêtre une image déjà existante. 
 %Diagramme de Cas d'Utilisation à la page \pageref{fig:useCaseDiagram}. 
@@ -177,18 +170,165 @@
 				\centering
 				\label{fig:recon}
 			\end{figure}
-			\paragraph{} Après avoir établi le prétraitement détaillé ci-dessus, on va procéder à la segmentation des caractères.
+
+			\paragraph{} Après avoir établi le prétraitement détaillé ci-dessus, une segmentation des caractères est produite. Chaque caractère est ensuite reconnu séparément par YOLO. L'IHM affiche la lettre la plus probable pour chaque objet détecté.
 			% \paragraph{} La segmentation des caractères 
 			% \paragraph{}Notre programme va segmenter les caractères, en faire des imagettes et donner ces imagettes individuellement à YOLO. Ensuite après cette reconnaissance, l'IHM présente le résultat.
-			\paragraph{} Dans un premier temps, une projection horizontale de histogramme de l'image binaire est calculée afin de segmenter les lignes de texte présentes dessus; cette projection de l'histogramme correspond à un vecteur de taille égale à la largeur de l'image et sommant le nombre de pixels noir sur une ligne.% Par la suite, nous avons écrit une fonction pour créer une image pour l'histogramme précédent.
-Les images d'entrée sont ne sont pas toujours parfaite, ce qui provoque l'apparition d'anomalies dans la projection, pouvant ainsi fausser l'analyse de l'image. Face à ce problème, nous avons créé des fonctions permettant de reconnaître et de supprimer ces anomalies que ce soit dans la partie segmentation des lignes ou des caractères.
-Ensuite, après segmentation des lignes et en se basant sur l'analyse de la projection verticale de l'histogramme de celles-ci, nous avions implémenté des fonctions permettant la localisation et la segmentation des caractères présents dans les lignes. 
-Le critère de détection est basé sur la succession de projections nulles et non nulles. En sortie, nous optenons l'image de chaque caractère et de chaque ligne.
+
+
+			\subsection{Filtres et seuillage}
+			Le pré-traitement de l'image est une phase importante qui affecte le bon déroulement de toutes les étapes futures. Les images prises par les appareils photos souffrent en général de divers problème liés à la difficulté de l'acquisition (manque de luminosité, présence de bruit, éclairage inhomogène, texte penché etc)
+			Puisque chaque image comporte des défauts qui lui sont propres, certains seuils et certains filtres seront plus adaptés que d'autres pour obtenir binarisation de qualité.
+			
+				\subsubsection{Seuillage global}
+				
+				\paragraph{} Le seuillage global consiste à diviser une image (en niveau de gris), en deux parties en utilisé une valeur prédéfinie appelée “seuil global”. Chaque pixel prend la valeur 0 (noir) si sa valeur initiale est en dessous du seuil global et 255 (blanc) sinon.
+				Le seuillage global est une méthode simple qui offre une binarisation sans bruit et qui suffit lorsque l'acquisition est de bonne qualité. (mettre les images)
+				
+				
+				\begin{figure}
+					\centering
+					\begin{minipage}{.5\textwidth}
+					  \centering
+					  \includegraphics[width=.8\linewidth]{imageSansSeuilBien.png}
+					  \caption{image prise par l'appareil photo}
+					  \label{fig:imageSansSeuilGlobal}
+					\end{minipage}%
+					\begin{minipage}{.5\textwidth}
+					  \centering
+					  \includegraphics[width=.8\linewidth]{imageSeuilGlobalBien.png}
+					  \caption{image après seuillage global }
+					  \label{fig:imageSeuilGlobalBien}
+					\end{minipage}
+				\end{figure}
+
+
+				\paragraph{} Cependant si l'image souffre d'un éclairage inhomogène le seuillage global devient inefficace. 
+				
+
+
+				\begin{figure}
+					\centering
+					\begin{minipage}{.5\textwidth}
+					  \centering
+					  \includegraphics[width=.8\linewidth]{seuil80.png}
+					  \caption{Seuillage global à 80}
+					  \label{fig:imageSeuilGlobal80}
+					\end{minipage}%
+					\begin{minipage}{.5\textwidth}
+					  \centering
+					  \includegraphics[width=.8\linewidth]{seuil140.png}
+					  \caption{Seuillage global à 140 }
+					  \label{fig:imageSeuilGlobal140}
+					\end{minipage}
+				\end{figure}
+
+
+
+				\subsubsection{Seuillage adaptatif}
+				\paragraph{} Contrairement à la méthode de seuillage global, qui utilise un seuil unique pour diviser une image en deux parties,
+				la méthode de seuillage adaptatif utilise un seuil différent pour chaque pixel de l'image en fonction de la valeur de ses voisins. 
+				Cela est particulièrement efficace pour exposer les lignes et les contours de l'image, et donc pour exhiber les lettres manuscrites. 
+				Il faut noter cependant que la binarisation produite contient du bruit “poivre et sel” (des valeurs anormalement basses ou haute à certains endroits). Pour pallier ce problème, nous appliquons au préalable un filtre médian sur l'image en niveau de gris.
+				
+				\begin{figure}
+					\centering
+					\begin{minipage}{.5\textwidth}
+					  \centering
+					  \includegraphics[width=.8\linewidth]{seuilAdaptatif.png}
+					  \caption{Seuil adaptatif}
+					  \label{fig:seuillageAdaptatif}
+					\end{minipage}%
+					\begin{minipage}{.5\textwidth}
+					  \centering
+					  \includegraphics[width=.8\linewidth]{seuilAdaptatifGauss.png}
+					  \caption{Seuil adaptatif avec un filtre gaussien}
+					  \label{fig:seuillageAdaptatifEtGauss}
+					\end{minipage}
+				\end{figure}
+
+
+				
+
+				\subsubsection{Seuillage de Sauvola}
+				\paragraph{} La méthode de Sauvola, qui se base également sur un seuillage local, vise à améliorer la qualité de la binarisation en présence d'un éclairage inhomogène et de variations locales de la luminance. Pour chaque pixel, le seuil est déterminé par cette formule mathématique :
+							T(x,y) = m(x,y) * (1 + k * (s(x,y) / R - 1))
+				où T(x,y) est le seuil pour le pixel à la position (x,y), m(x,y) est la moyenne locale des niveaux de gris, s(x,y) est l'écart type local des niveaux de gris, k est un paramètre de pondération et R est la valeur de l'échelle fixe.
+				Cette méthode est particulièrement adaptée pour la segmentation de l'écriture manuscrite à condition de choisir une bonne valeur pour k. 
+
+
+
+				\subsubsection{Seuillage Otsu}
+				\paragraph{} La méthode d'Otsu effectue simplement un seuillage global, mais en minimisant l'écart entre le nombre de pixels blancs et le nombre de pixels noirs. Pour la reconnaissance de l'écriture manuscrite, il peut être utile pour différencier le support d'écriture (en général une feuille blanche) du reste de la scène.
+				Pour exploiter au mieux ce seuil, il faut d'abord appliquer un flou gaussien qui égalise la couleur du support d'écriture (supposée uniforme). 
+				Il se peut que le seuillage identifie les lettres comme élément du second plan. Dans ce cas, nous effectuons une fermeture (une dilatation suivie d'une érosion) sur l'image seuillée.
+				
+
+				\begin{figure}
+					\centering
+					\begin{minipage}{.5\textwidth}
+					  \centering
+					  \includegraphics[width=.8\linewidth]{sansOtsu.png}
+					  \caption{image de base}
+					  \label{fig:sansOtsu}
+					\end{minipage}%
+					\begin{minipage}{.5\textwidth}
+					  \centering
+					  \includegraphics[width=.8\linewidth]{apresOtsu.png}
+					  \caption{après seuil otsu}
+					  \label{fig:apresOtsu}
+					\end{minipage}
+				\end{figure}
+
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.4\textwidth]{apresFermeture.png}
+					\caption{apres la fermeture}
+					\label{fig:apresFermeture}
+				\end{figure}
+
+				\paragraph{} Après avoir obtenu la position de la feuille, nous appliquons un NON binaire pour nous en servir comme masque. Après un OU binaire entre ce masque et l'image d'origine, le texte apparait sans la scène (mal dit à reformuler)
+
+
+
+				\begin{figure}[H]
+					\centering
+					\begin{minipage}{.5\textwidth}
+					  \centering
+					  \includegraphics[width=.8\linewidth]{nonBinaireOtsu.png}
+					  \caption{NON binaire}
+					  \label{fig:nonBinaireOtsu}
+					\end{minipage}%
+					\begin{minipage}{.5\textwidth}
+					  \centering
+					  \includegraphics[width=.8\linewidth]{imageSansFond.png}
+					  \caption{image Sans le fond}
+					  \label{fig:imageSansFond}
+					\end{minipage}
+				\end{figure}
+
+
+				
+
+
+
+
+			
+
+			\subsection{Segmentation} 
+				\paragraph{} Une fois l'image binarisée, il faut maintenant séparer chaque caractère présent dans l'image.
+				
+				\paragraph{} Dans un premier temps, une projection horizontale de histogramme de l'image binaire est calculée afin de segmenter les lignes de texte présentes dessus; 
+				\paragraph{} cette projection de l'histogramme correspond à un vecteur de taille égale à la largeur de l'image et sommant le nombre de pixels noirs sur une ligne.% Par la suite, nous avons écrit une fonction pour créer une image pour l'histogramme précédent.
+				Les images d'entrée ne sont pas toujours parfaites, ce qui provoque l'apparition d'anomalies dans la projection, pouvant ainsi fausser l'analyse de l'image. Face à ce problème, nous avons créé des fonctions permettant de reconnaître et de supprimer ces anomalies que ce soit pour la segmentation des lignes ou des caractères.
+				Après la segmentation des lignes et en se basant sur l'analyse de la projection verticale de l'histogramme de celles-ci, nous avons implémenter des fonctions permettant la localisation et la segmentation des caractères présents dans les lignes. 
+				Le critère de détection est basé sur la succession de projections nulles et non nulles. En sortie, nous optenons l'image de chaque caractère et de chaque ligne.
+				(faudrait dire "voir algo en référençant la bonne page)
 			% relire et reformuler
 			
 			% \paragraph{}Il est possible de voir les imagettes générées dans le dossier "./images/imageSegmentee"
-		\subsection{Procédures de lecture et validation des entrées}
-			beep	
+		
 		\subsection{Statistiques}
 			\begin{itemize}
 				\item[•] Nombres de lignes de code : 
