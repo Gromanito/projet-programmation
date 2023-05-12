@@ -102,8 +102,6 @@ def ouverture(img, nombreErosion, tailleMatrice=5):
 	return img
 
 
-def coucou():
-	print("bon")
 
 
 def dilatation(img, tailleMatrice=5):
@@ -575,56 +573,6 @@ def getVerticalProjectionProfile(image):
 # 	return
 # 	#l'image est déjà binarisée et en niveau de gris
 
-def segmenteRomain(image):
-	#image est déjà binarisée (heureusement) et en NVG
-
-	listeLigne = segmentationLigneRomain(image)
-
-	try: # on remplace les anciennes images segmentées par les nouvelles
-		os.mkdir("images/imageSegmentee") # le dossier n'existe pas
-	except OSError as error: 
-		shutil.rmtree('images/imageSegmentee')
-		os.mkdir("images/imageSegmentee") # le dossier n'existe pas
-
-
-
-	#on a les coordonnées des lignes, on extrait chaque ligne de l'image et on segmente lettre
-	for i, ligne in enumerate(listeLigne):
-
-		imageLigne = image[ligne[0]: ligne[1] , 0: image.shape[1]]
-
-		listeLettre = segmentationLettreRomain(imageLigne)
-
-		nomDossierLigne = "images/imageSegmentee/ligne{:02d}".format(i)
-		os.mkdir(nomDossierLigne)
-
-		#on a les coordonnées de chaque lettres, on crée les fichiers
-		for j, lettre in enumerate(listeLettre):
-
-			imageLettre = imageLigne[0: imageLigne.shape[0] , lettre[0]:lettre[1]]
-			cv.imwrite(nomDossierLigne + "/lettre{:02d}.png".format(j), imageLettre)
-
-
-def segmenteRomain(image):
-	listeLigne = segmentationLigneRomain(image)
-	listeImagettes = []
-
-	for i, ligne in enumerate(listeLigne):
-
-		imageLigne = image[ligne[0]: ligne[1] , 0: image.shape[1]]
-
-		listeLettre = segmentationLettreRomain(imageLigne)
-		listeImagettes.append([])
-
-
-		#on a les coordonnées de chaque lettres, on crée les fichiers
-		for j, lettre in enumerate(listeLettre):
-
-			imageLettre = imageLigne[0: imageLigne.shape[0] , lettre[0]:lettre[1]]
-			listeImagettes[-1].append(imageLettre)
-	
-	return listeImagettes
-
 
 
 
@@ -689,3 +637,9 @@ def compteCombienCoherent():
 			file.write( str(compteurJuste)+"/12 corrects\n\n" + '\n'.join(texteAEcrire))
 
 		
+
+
+model = YOLO("src/pourYOLO/entrainementsYolo/bestUpperSansBord.pt")
+
+model.predict("images/imageSegmentee/ligne00")
+
