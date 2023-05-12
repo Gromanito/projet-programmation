@@ -42,8 +42,8 @@
 	\section{Présentation du Sujet } 
 		\subsection{La problématique}
 			\paragraph{}
-				La reconnaissance de l'écriture manuscrite consiste à traduire un texte manuscrit en un texte numérique, interprétable par l'ordinateur. Bien que cette application commence à être utilisé dans différents secteurs, 
-				la variation des styles d'écritures manuscrites d'une personne à l'autre et la mauvaise qualité du texte pose des défis importants pour leurs numérisations.% manuscrits en texte numérique.%  convertion en texte numérique.
+				La reconnaissance de l'écriture manuscrite consiste à traduire un texte manuscrit en un texte numérique, interprétable par l'ordinateur. Cette application commence à être utilisé dans différents secteurs, 
+				mais la variation des styles d'écritures manuscrites d'une personne à l'autre et la mauvaise qualité du texte pose des défis importants pour leurs numérisations.% manuscrits en texte numérique.%  convertion en texte numérique.
 \\Les méthodes classiques étudiées auparavant ou présentées dans la littérature, notamment l'amélioration de la qualité d'images (filtres, etc) ou la reconnaissance des formes complexes, peuvent ne pas répondre à ce type de problématique.
 \\Ainsi dans ce projet, nous allons explorer un autre axe de recherche basée sur les méthodes de réseaux de neuronne qui ont prouvé leur efficacité à reconnaître et classifier les formes les plus complexes.
 \\Cette recherche va nous permettre de mettre en oeuvre nos compétences en traitement d'image et d'explorer de nouvelles méthodes plus avancées.
@@ -53,8 +53,8 @@
 			% représentée. Il voit les pixels mais pas les charactères. De plus, des imperfections dans la capture du document changent la photo (ex: luminosité, angle ...), il y a une modification des informations
 			% alors que le texte ne change pas.
 			% \\Réussir à lire du texte sur des images permettrait de faciliter la numérisation de document papier. Ainsi, libérer les Humains de quelques tâches redondantes. Lire des formulaires ou encore d'améliorer les moteurs de recherche avec des images qui contient du texte sont des applications possibles.
-		\subsection*{}
-			Le traitement automatique de l'information numérique est particulièrement intéressant compte tenu des enjeux actuels. Notamment, vis à vis du développement des IAs étant très utilisées par les entreprises 
+		\paragraph{}
+			Le traitement automatique de l'information numérique est particulièrement intéressant et  compte tenu des enjeux actuels. Notamment, vis à vis du développement des IAs étant très utilisées par les entreprises 
 			sachant le gain de temps et de productivité considérable que ces dernières peuvent leurs apporter.
 
 			%pour des étudiants en informatique car il peut être abordé de nombreuses manières. 
@@ -187,6 +187,7 @@
 			% \paragraph{}Notre programme va segmenter les caractères, en faire des imagettes et donner ces imagettes individuellement à YOLO. Ensuite après cette reconnaissance, l'IHM présente le résultat.
 
 
+			\vspace*{1.5cm}
 			\subsection{Filtres et seuillage}
 			Le pré-traitement de l'image est une phase importante qui affecte le bon déroulement de toutes les étapes futures. Les images prises par les appareils photos souffrent en général de divers problème liés à la difficulté de l'acquisition (manque de luminosité, présence de bruit, éclairage inhomogène, texte penché etc)
 			Puisque chaque image comporte des défauts qui lui sont propres, certains seuils et certains filtres seront plus adaptés que d'autres pour obtenir binarisation de qualité.
@@ -194,10 +195,10 @@
 				\subsubsection{Seuillage global}
 				
 				\paragraph{} Le seuillage global consiste à diviser une image (en niveau de gris), en deux parties en utilisé une valeur prédéfinie appelée “seuil global”. Chaque pixel prend la valeur 0 (noir) si sa valeur initiale est en dessous du seuil global et 255 (blanc) sinon.
-				Le seuillage global est une méthode simple qui offre une binarisation sans bruit et qui suffit lorsque l'acquisition est de bonne qualité. (mettre les images)
+				 \newpage Le seuillage global est une méthode simple qui offre une binarisation sans bruit et qui suffit lorsque l'acquisition est de bonne qualité.\nopagebreak
 				
 				
-				\begin{figure}[h]
+				\begin{figure}[H]
 					\centering
 					\begin{minipage}{.5\textwidth}
 					  \centering
@@ -217,8 +218,8 @@
 				\paragraph{} Cependant si l'image souffre d'un éclairage inhomogène le seuillage global devient inefficace. 
 				
 
-
-				\begin{figure}[h]
+				\vspace*{1cm}
+				\begin{figure}[h!]
 					\centering
 					\begin{minipage}{.5\textwidth}
 					  \centering
@@ -242,7 +243,9 @@
 				Cela est particulièrement efficace pour exposer les lignes et les contours de l'image, et donc pour exhiber les lettres manuscrites. 
 				Il faut noter cependant que la binarisation produite contient du bruit “poivre et sel” (des valeurs anormalement basses ou haute à certains endroits). Pour pallier ce problème, nous appliquons au préalable un filtre médian sur l'image en niveau de gris.
 				
-				\begin{figure}[h]
+				\vspace*{1cm}
+
+				\begin{figure}[h!]
 					\centering
 					\begin{minipage}{.5\textwidth}
 					  \centering
@@ -263,19 +266,31 @@
 
 				\subsubsection{Seuillage de Sauvola}
 				\paragraph{} La méthode de Sauvola, qui se base également sur un seuillage local, vise à améliorer la qualité de la binarisation en présence d'un éclairage inhomogène et de variations locales de la luminance. Pour chaque pixel, le seuil est déterminé par cette formule mathématique :
-							T(x,y) = m(x,y) * (1 + k * (s(x,y) / R - 1))
-				où T(x,y) est le seuil pour le pixel à la position (x,y), m(x,y) est la moyenne locale des niveaux de gris, s(x,y) est l'écart type local des niveaux de gris, k est un paramètre de pondération et R est la valeur de l'échelle fixe.
+				\paragraph{} \hspace*{0.4\linewidth}			T(x,y) = m(x,y) * (1 + k * (s(x,y) / R - 1))
+				\paragraph{} où T(x,y) est le seuil pour le pixel à la position (x,y), m(x,y) est la moyenne locale des niveaux de gris, s(x,y) est l'écart type local des niveaux de gris, k est un paramètre de pondération et R est la valeur de l'échelle fixe.
 				Cette méthode est particulièrement adaptée pour la segmentation de l'écriture manuscrite à condition de choisir une bonne valeur pour k. 
 
+				\vspace*{1cm}
 
+
+				\begin{figure}[h!]
+					\centering
+					\includegraphics[width=0.4\textwidth]{seuilSauvola.png}
+					\caption{Seuillage de Sauvola}
+					\label{fig:seuilSauvola}
+				\end{figure}
+
+
+				\hspace*{1.5cm}
 
 				\subsubsection{Seuillage Otsu}
 				\paragraph{} La méthode d'Otsu effectue simplement un seuillage global, mais en minimisant l'écart entre le nombre de pixels blancs et le nombre de pixels noirs. Pour la reconnaissance de l'écriture manuscrite, il peut être utile pour différencier le support d'écriture (en général une feuille blanche) du reste de la scène.
 				Pour exploiter au mieux ce seuil, il faut d'abord appliquer un flou gaussien qui égalise la couleur du support d'écriture (supposée uniforme). 
 				Il se peut que le seuillage identifie les lettres comme élément du second plan. Dans ce cas, nous effectuons une fermeture (une dilatation suivie d'une érosion) sur l'image seuillée.
 				
-
-				\begin{figure}[h]
+				
+				\hspace*{1.5cm}
+				\begin{figure}[h!]
 					\centering
 					\begin{minipage}{.5\textwidth}
 					  \centering
@@ -286,24 +301,24 @@
 					\begin{minipage}{.5\textwidth}
 					  \centering
 					  \includegraphics[width=.8\linewidth]{apresOtsu.png}
-					  \caption{après seuil otsu}
+					  \caption{après le seuillage d'otsu}
 					  \label{fig:apresOtsu}
 					\end{minipage}
 				\end{figure}
 
 
-				\begin{figure}[h]
+				\begin{figure}[h!]
 					\centering
 					\includegraphics[width=0.4\textwidth]{apresFermeture.png}
-					\caption{apres la fermeture}
+					\caption{après la fermeture}
 					\label{fig:apresFermeture}
 				\end{figure}
 
-				\paragraph{} Après avoir obtenu la position de la feuille, nous appliquons un NON binaire pour nous en servir comme masque. Après un OU binaire entre ce masque et l'image d'origine, le texte apparait sans la scène (mal dit à reformuler)
+				\paragraph{} Après avoir obtenu la position de la feuille, nous appliquons un NON binaire pour nous en servir comme masque. Après un OU binaire entre ce masque et l'image d'origine, on conserve l'information du support d'écriture, et non l'arrière plan.
 
 
 
-				\begin{figure}[h]
+				\begin{figure}[h!]
 					\centering
 					\begin{minipage}{.5\textwidth}
 					  \centering
@@ -314,34 +329,31 @@
 					\begin{minipage}{.5\textwidth}
 					  \centering
 					  \includegraphics[width=.8\linewidth]{imageSansFond.png}
-					  \caption{image Sans le fond}
+					  \caption{image sans l'arrière plan}
 					  \label{fig:imageSansFond}
 					\end{minipage}
 				\end{figure}
 
 
 				
-
-
-
-
 			
 
 			\subsection{Segmentation} 
-				\paragraph{} Une fois l'image binarisée, il faut maintenant séparer chaque caractère présent dans l'image.
+				\paragraph{} Une fois l'image binarisée, il faut séparer chaque caractère présent dans l'image.
 				
 				\paragraph{} Dans un premier temps, une projection horizontale de histogramme de l'image binaire est calculée afin de segmenter les lignes de texte présentes dessus; 
-				\paragraph{} cette projection de l'histogramme correspond à un vecteur de taille égale à la largeur de l'image et sommant le nombre de pixels noirs sur une ligne. % Par la suite, nous avons écrit une fonction pour créer une image pour l'histogramme précédent.
-				Les images d'entrée ne sont pas toujours parfaites, ce qui provoque l'apparition d'anomalies dans la projection, pouvant ainsi fausser l'analyse de l'image. Face à ce problème, nous avons créé des fonctions permettant de reconnaître et de supprimer ces anomalies que ce soit pour la segmentation des lignes ou des caractères.
-				Après la segmentation des lignes et en se basant sur l'analyse de la projection verticale de l'histogramme de celles-ci, nous avons implémenté des fonctions permettant la localisation et la segmentation des caractères présents dans les lignes. 
+				Cette projection de l'histogramme correspond à un vecteur de taille égale à la largeur de l'image et sommant le nombre de pixels noirs sur une ligne. % Par la suite, nous avons écrit une fonction pour créer une image pour l'histogramme précédent.
+				\newline Les images d'entrée ne sont pas toujours parfaites, ce qui provoque l'apparition d'anomalies dans la projection, pouvant ainsi fausser l'analyse de l'image. Face à ce problème, nous avons créé des fonctions permettant de reconnaître et de supprimer ces anomalies que ce soit pour la segmentation des lignes ou des caractères.
+				\newline Après la segmentation des lignes et en se basant sur l'analyse de la projection verticale de l'histogramme de celles-ci, nous avons implémenté des fonctions permettant la localisation et la segmentation des caractères présents dans les lignes. 
 				Le critère de détection est basé sur la succession de projections nulles et non nulles. En sortie, nous optenons l'image de chaque caractère et de chaque ligne.
-				(faudrait dire "voir algo en référençant la bonne page)
+				(voir l'algorithme de segmentation \ref{alg:segmentation})
 			% relire et reformuler
 			
 			% \paragraph{}Il est possible de voir les imagettes générées dans le dossier "./images/imageSegmentee"
 		
 		
 
+			\hspace*{1.5cm}
 
 		\subsection{Entrainement de YOLO}
 
@@ -349,18 +361,18 @@
 			Concernant les images d'entrainement, nous avons choisi la base de données d'images d'écriture manuscrite développée par le National Institute of Standards and Technology (NIST).
 			Cette base de données contient des images de caractères manuscrits et de formulaires remplis à la main, qui ont été collectées pour soutenir la recherche en reconnaissance d'écriture manuscrite.
 			
-			\begin{figure}[h]
+			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=0.6\textwidth]{lettreABDD.png}
 				\caption{Un exemple pour la lettre A}
 				\label{fig:BDDNIST}
 			\end{figure}
 		
-			\paragraph{} Cette banque d'image contient en tout 800 000 caractères, écrits par 3600 personnes différentes. Avant d'entrainer notre réseau de neurones,
-			il faut conformer ces images aux images produite par notre segmentation. Nous avons donc enlever les bords blancs de chaque image de la banque d'image et redimensionner en 128x128.
+			\paragraph{} Cette banque d'image contient en tout 800 000 photos de caractères manuscrits, écrits par 3600 personnes différentes. Avant d'entrainer notre réseau de neurones,
+			il faut conformer ces images aux images produites par notre segmentation. Nous avons donc enlevé les bords blancs de chaque image de la banque d'image et redimensionné en 128x128.
 
 
-			\begin{figure}[h]
+			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=0.6\textwidth]{lettreASansBordBDD.png}
 				\caption{lettre A après découpage et redimension}
@@ -374,13 +386,6 @@
 
 
 
-			\subsection{Statistiques}
-			\begin{itemize}
-				\item[•] Nombres de lignes de code : 
-				\item[•] Nombres de script
-			\end{itemize}
-	
-	\newpage
 
 	
 	\section{Algorithmes et Analyse}
@@ -505,31 +510,36 @@
 				\KwRet{lettres}
 			\end{algorithm}
 			\begin{figure}
+				\centering
 				\includegraphics[width=.75\textwidth]{segmentation_image_originel.png}
 				\caption{Exemple d'une image après filtrage}
-				\centering
 				\label{fig:imageOriginel}
 			\end{figure}
 			\paragraph{} Sur la figure \ref{fig:imageOriginel}, nous voyons une image de bonne qualité prête à être segmenter par l'algorithme n°\ref{alg:segmentation} (page\pageref{alg:segmentation}). 
+			
+			
 			\begin{figure}
-				\caption{Images des deux lignes extraites à partir de l'image de départ}
+				\centering
 				\includegraphics[width=.8\textwidth]{segmentation_ligne1.png}
-				\caption{Images de nos 2 lignes créées à partir de l'image de départ}
-				\centering
 				\includegraphics[width=.8\textwidth]{segmentation_ligne2.png}
-				\centering
+				\caption{Images de nos deux lignes créées à partir de l'image de départ}
+				% \centering
 				\label{fig:imageLignes}
 			\end{figure}
+			
+			
 			% \paragraph{} On voit sur la figure \ref{fig:imageLignes} à la page \pageref{fig:imageLignes} que dû à un filtrage de bonne qualité, nous obtenons exactement 2 lignes comme attendus. 
 			\begin{wrapfigure}{r}{0.35\textwidth}
 				\includegraphics[width=0.35\textwidth]{structDonnee.png}
 				\caption{Structure de données dans l'algorithme SEGMENTATION}
-					\label{fig:structDonnee}
+				\label{fig:structDonnee}
+			
 			\end{wrapfigure}
+
 			\paragraph{} Grâce à une projection vertical, nous obtenons ce tableau (figure \ref{fig:structDonnee}). La 1er ligne de ce tableau contient autant de tuples que le nombre de lignes. Chaque tuples contient la composante en ordonnée du début et de la fin d'une ligne. Ensuite, on extrait nos 2 lignes comme sur la figure \ref{fig:imageLignes} depuis l'image d'entrée.
 			\paragraph{} Après avoir isolé les lignes, on procède à la séparation des caractères contenus dans chaque lignes en suivant l'algorithme n°\ref{alg:coordcar} page \pageref{alg:coordcar}
 			\paragraph{} Étant donné que l'image est binairisée, lorsqu'un carctère est présent à un endroit donné, cela signifie que sur la projection verticale de l'histogramme est supérieur à 0 à cette position. L'algorithme n°\ref{alg:coordcar} va parcourir cette projection de l'histogramme, déctecter les pics et récupérer l'indice de début et de fin de ces derniers qui correspondront à la limite gauche et droit d'un caractère sur l'image. Nous pouvons voir le résultats de cette fonction sur la figure \ref{fig:structDonnee} et des histogrammes de projection horizontal dans l'annexe (page \pageref{fig:histoX1}).
-			\begin{figure}
+			\begin{figure}[h!]
 				\caption{Imagettes des caractères créées à partir de la 1e ligne}
 				\includegraphics[scale=.3]{segmentation_F.png}
 				\centering
@@ -537,8 +547,8 @@
 				\centering
 				\includegraphics[scale=.3]{segmentation_O2.png}
 				\centering
-			\end{figure}
-			\begin{figure}
+			% \end{figure}[h!]
+			% \begin{figure}
 				\caption{Imagettes des caractères créées à partir de la 2e ligne}
 				\includegraphics[scale=.3]{segmentation_B.png}
 				\centering
@@ -550,16 +560,14 @@
 	\newpage
 	\section{Analyse des Résulats}
 		\subsection{Mesure expérimental de YOLO}
-			\paragraph{} Pour mesurer le taux de prédiction correcte de YOLO, nous avons écrit des lettres de différentes manières et nous avons observer le taux de réussite
+			\paragraph{} Pour mesurer le taux de prédiction correcte de YOLO, nous avons écrit des lettres de différentes manières et nous avons observé le taux de réussite.
 			\begin{figure}[H]
-				\caption{}
-				\includegraphics[width=\textwidth]{grapYoloReussite.png}
+				\includegraphics[width=0.9\textwidth]{grapYoloReussite.png}
 				\centering
 				\label{fig:graph:reussite}
 			\end{figure}
 			\begin{figure}[H]
-				\caption{}
-				\includegraphics[width=\textwidth]{grapYoloConfiance.png}
+				\includegraphics[width=0.9\textwidth]{grapYoloConfiance.png}
 				\centering
 				\label{fig:graph:confiance}
 			\end{figure}
@@ -584,10 +592,11 @@
 			% 	\label{fig:bienMalEcrit}
 			% \end{figure}
 
-			\begin{center}
+
+			\begin{figure}[h]
 				\includegraphics[width=.4\textwidth]{bienEcritMalEcrit.png}
 				\includegraphics[width=.4\textwidth]{bienEcritMalEcritLabel.png}
-			\end{center}
+			\end{figure}
 
 
 			\paragraph{} Grâce aux bonnes performances de YOLO, la reconnaissance d'un caractère est de l'ordre de la milliseconde. La reconnaissance se fait donc instantanément.
@@ -599,29 +608,29 @@
 				\label{fig:speedYOLO}
 			\end{figure}
 
-	\section{Gestion du Projet}
-		\paragraph{} Pendant ce projet, nous avions dû communiquer régulièrement afin d'être au point sur les éléments à développer ou corriger, nécessitant ainsi l'utilisation de Discord.
-		\paragraph{} De plus, pour le partage de code et le versioning, nous avions utilisés git et Github
-		Laurent : filtrage, segmentation
-		Romain : IHM, YOLO
-		Tony : rapport, segmentation 
+	\newpage
 	\addcontentsline{toc}{section}{Bilan et Conclusions}%insert dans le toc
 	\section*{Bilan et Conclusions}%sans numéro et pas dans le toc
+
 		\paragraph{}
-			tests
+		Dans le cadre du projet, nous avons créé une interface graphique qui permet de faire l'acquisition d'une image.
+		Notre logiciel propose quelques méthodes de seuillage adaptées et des outils pour découper et pivoter l'image afin de faciliter la segmentation.
+		Enfin, notre réseau de neurones devine chaque caractère avec une précision convenable et ce, presque immédiatement.
+		
 		\paragraph{}
-			Cependant, certains points laissent à désirer dans notre projet. Malheureusement, une contribution de l'utilisateur est nécessaire. Pour une bonne reconnaissance des caractères, l'utilisateur doit rogner l'image. Il serait plus pratique que le \emph{rognagne soit fait automatiquement}. 
+		Nous avons respecté le cahier des charges en réalisant un logiciel qui fonctionne et qui produit une réponse convenable au problème posé.
+		Cependant, une contribution de l'utilisateur est souvent nécessaire pour choisir les bons filtres, appliquer une rotation ou encore découper l'image. 
+		En outre, notre logiciel reconnait seulement 26 lettres majuscules et ignore les espaces.
+		Reconnaitre les caractères minuscules ainsi que les chiffres et certains caractères spéciaux ne serait pas une tâche difficile à condition d'avoir une grande banque de donnée et assez de puissance de calcul pour la phase d'apprentissage.
+		Nous pourrions également explorer des approches de post-traitement plus sophistiquées pour améliorer la précision de la reconnaissance des caractères, telles que la correction d'erreurs par les dictionnaires ou l'utilisation de modèles de langue pour l'analyse contextuelle du texte.
+		En revanche reconnaitre les lettres dans une écriture cursive est une tâche bien plus complexe qui reste un domaine de recherche actif en reconnaissance de l'écriture manuscrite.
+		
 		\paragraph{}
-			Ensuite, au niveau de la \emph{segmentation}, notre algorithme n'est pas capable de séparer des lettre cursives et ignore totalement les espaces.
-		\paragraph{}
-			Et enfin, dans le futur, le but sera que \emph{YOLO} reconnaisse aussi l'alphabet minuscule mais aussi l'alphabet français (avec les accents).
-%		meilleur segmentation : segmentation des lettres cursives, reconnaissance des espaces
-%		modifier les hyper paramètres de yolo
-%		YOLO : lettres minuscule, avec accents
-	\newpage
-	\section*{Bibliographie}
-		% \bibliographystyle{plain} % We choose the "plain" reference style
-		% \bibliography{refs} % Entries are in the refs.bib file
+		Ce projet a été l'opportunité pour nous de découvrir un domaine 
+		
+
+
+
 	\newpage
 	\section*{Annexes}
 		\begin{figure}[H]
