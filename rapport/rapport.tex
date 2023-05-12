@@ -122,7 +122,7 @@
 				Elle est déposée sous licence libre, et sa popularité ainsi que sa simplicité d'utilisation en font un outil adéquat pour notre projet.
 				Parmi ses nombreuses fonctionnalités, nous utiliserons surtout ses fonctions de filtrage et de seuillage.
 				
-				\newline
+				% \newline
 			\subsubsection{You Only Look Once}
 				\paragraph{}
 				You Only Look Once (YOLO) est une archicture de Réseau Neuronal Convolutif (CNN) qui est capable de localiser des objets dans une image et, en même temps, de les classifier.
@@ -167,13 +167,13 @@
 %Diagramme de Cas d'Utilisation à la page \pageref{fig:useCaseDiagram}. 
 			\begin{figure}[H]
 				\centering
-				\includegraphics[width=0.8\textwidth]{modif.png}
+				\includegraphics[width=0.8\textwidth]{modifAB.png}
 				\caption{Fenêtre de l'IHM où l'on peut rogner, pivoter et filtrer une image}
 				\label{fig:modif}
 			\end{figure}
 			\paragraph{}
-				Après avoir entrer une image (figure 2 A), une étape de préprocessing (découpage) peut-être établi pour réduire le bruit concentrer sur les bords de l'image et causé par la lumière .
-				L'image résultat est convertie après en image binaire réalisé avec un seuil adapté. Puis, les pixels noirs et blancs ont été inversé pour facilité la segmentation des images.
+				Après avoir entrer une image (figure \ref{fig:modif} A), une étape de préprocessing (découpage) peut-être établi pour réduire le bruit concentrer sur les bords de l'image et causé par la lumière .
+				L'image résultat (figure \ref{fig:modif} B) est convertie après en image binaire réalisé avec un seuil adapté. Puis, les pixels noirs et blancs ont été inversé pour facilité la segmentation des images.
 				%il est possible qu'il y ait beaucoup de bruit, dans ce cas là, nous pouvons rogner l'image pour enlever des ombres sur les bords, faire des rotations et filtrer pour enlever le bruit comme illustrée sur la figure \ref{fig:modif}
 			\begin{figure}[H]
 				\centering
@@ -182,7 +182,7 @@
 				\label{fig:recon}
 			\end{figure}
 
-			\paragraph{} Après avoir établi le prétraitement détaillé ci-dessus, une segmentation des caractères est produite. Chaque caractère est ensuite reconnu séparément par YOLO. L'IHM affiche la lettre la plus probable pour chaque objet détecté.
+			\paragraph{} Après avoir établi le prétraitement, une segmentation des caractères est produite sur une image de bonne qualité (voir figure \ref{fig:recon}). Chaque caractère est ensuite reconnu séparément par YOLO. L'IHM affiche la lettre la plus probable pour chaque objet détecté.
 			% \paragraph{} La segmentation des caractères 
 			% \paragraph{}Notre programme va segmenter les caractères, en faire des imagettes et donner ces imagettes individuellement à YOLO. Ensuite après cette reconnaissance, l'IHM présente le résultat.
 
