@@ -1,0 +1,201 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdftex 2022.10.26)  12 MAY 2023 11:33
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**./rapport/rapport.tex
+(./rapport/rapport.tex
+! Undefined control sequence.
+l.1 \documentclass
+                  [a4paper]{article}
+? 
+! Undefined control sequence.
+l.3 \usepackage
+               [utf8]{inputenc}   % LaTeX, comprends les accents !
+? 
+! Undefined control sequence.
+l.4 \usepackage
+               [T1]{fontenc}      % Police contenant les caractères français
+? 
+! Undefined control sequence.
+l.5 \usepackage
+               [french]{babel}
+? 
+! Undefined control sequence.
+l.6 \usepackage
+               {fullpage}
+? 
+! Undefined control sequence.
+l.7 \usepackage
+               {graphicx}
+? 
+! Undefined control sequence.
+l.8 \usepackage
+               {wrapfig}
+? 
+! Undefined control sequence.
+l.9 \usepackage
+               {float}
+? 
+! Undefined control sequence.
+l.10 \usepackage
+                {blindtext}
+? 
+! Undefined control sequence.
+l.11 \usepackage
+                {algorithm2e}
+? 
+! Undefined control sequence.
+l.13 \usepackage
+                [colorlinks=true,linkcolor=black,urlcolor=black,bookmarksope...
+
+? 
+! Undefined control sequence.
+l.14 \usepackage
+                {bookmark}
+? 
+! Undefined control sequence.
+l.15 \usepackage
+                {blindtext}
+? 
+
+Overfull \hbox (14.91295pt too wide) in paragraph at lines 3--17
+\tenrm links=true,linkcolor=black,urlcolor=black,bookmarksopen=true,bookmarksnu
+mbered=true]hyperref book-mark|
+
+\hbox(7.5+2.5)x469.75499, glue set - 1.0
+.\tenrm l
+.\tenrm i
+.\tenrm n
+.\tenrm k
+.\tenrm s
+.etc.
+
+! Undefined control sequence.
+l.18 \RestyleAlgo
+                 {ruled}
+? 
+! Undefined control sequence.
+l.19 \graphicspath
+                  { {./img/} }
+? 
+! Undefined control sequence.
+l.21 \begin
+           {document}
+? 
+! Undefined control sequence.
+l.22 	\title
+            {Reconnaissance de l'écriture manuscrite\\Rapport de projet}
+? 
+Missing character: There is no � in font cmr10!
+Missing character: There is no � in font cmr10!
+! Argument of \\ has an extra }.
+<inserted text> 
+                \par 
+<to be read again> 
+                   }
+l.22 ...l'écriture manuscrite\\Rapport de projet}
+                                                  
+? 
+Runaway argument?
+Rapport de projet
+! Paragraph ended before \\ was complete.
+<to be read again> 
+                   \par 
+<to be read again> 
+                   }
+l.22 ...l'écriture manuscrite\\Rapport de projet}
+                                                  
+? 
+! Undefined control sequence.
+l.23 	\author
+             {Laurent Antoinette, Romain Campillo, Tony Nguyen\\\emph{L3 inf...
+
+? 
+! Argument of \\ has an extra }.
+<inserted text> 
+                \par 
+<to be read again> 
+                   }
+l.25 	Université de Montpellier.}
+                                  
+? 
+Runaway argument?
+\emph {L3 informatique}\\ Faculté des Sciences\\ Université de Mont\ETC.
+! Paragraph ended before \\ was complete.
+<to be read again> 
+                   \par 
+<to be read again> 
+                   }
+l.25 	Université de Montpellier.}
+                                  
+? 
+! Undefined control sequence.
+l.26 	\date
+           {\today}
+? 
+! Undefined control sequence.
+l.26 	\date{\today
+                  }
+? 
+! Undefined control sequence.
+l.27 	\maketitle
+                
+? 
+! Undefined control sequence.
+l.28 	\thispagestyle
+                    {empty}
+? 
+! Undefined control sequence.
+l.29 	\begin
+            {figure}[h]
+? 
+! Undefined control sequence.
+l.30 		\includegraphics
+                       [scale=.1]{selfie_tony_clementine.jpg}
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+<to be read again> 
+                   _
+l.30 		\includegraphics[scale=.1]{selfie_
+                                         tony_clementine.jpg}
+? 
+! Extra }, or forgotten $.
+l.30 ...hics[scale=.1]{selfie_tony_clementine.jpg}
+                                                  
+? 
+! Missing number, treated as zero.
+<to be read again> 
+                   \end 
+l.33 	\end
+          {figure}
+? 
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   \end 
+l.33 	\end
+          {figure}
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+<to be read again> 
+                   \end 
+l.33 	\end
+          {figure}
+? 
+[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] )
+(\end occurred inside a group at level 1)
+
+### simple group (level 1) entered at line 30 ({)
+### bottom level</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
+Output written on rapport.pdf (1 page, 35829 bytes).
+PDF statistics:
+ 20 PDF objects out of 1000 (max. 8388607)
+ 13 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+

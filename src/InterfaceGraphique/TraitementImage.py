@@ -69,15 +69,7 @@ def enleveFondNoir(img):
 	# on va appliquer un filtre de otsu, qui distingue 2 types d'objets (nous ce sera feuille blanche / fond noir)
 	#probleme : si y a pas de fond noir, ça enlève l'écriture
 	# on rajoute manuellement du fond noir avec une translation (d'où la matrice)
-
-	testDilate = dilatation(img, 17 )
-
-	blur = cv.GaussianBlur(testDilate, (25,25), 0) #on floute bien bien pour que ça ressemble bien à une feuille tt blanche
-	blur = cv.GaussianBlur(blur, (25,25), 0) #on floute bien bien pour que ça ressemble bien à une feuille tt blanche
-
-	# blur = cv.GaussianBlur(blur, (55,55), 0) #on floute bien bien pour que ça ressemble bien à une feuille tt blanche
-	# blur = cv.GaussianBlur(blur, (55,55), 0) #on floute bien bien pour que ça ressemble bien à une feuille tt blanche
-	# blur = cv.blur(img, (71,71)) #on floute bien bien pour que ça ressemble bien à une feuille tt blanche
+	blur = cv.GaussianBlur(img, (25,25), 0) # "égalise la feuille"
 
 	M = np.float32([
 	[1, 0, 300],  #translation vers la droite
@@ -88,6 +80,10 @@ def enleveFondNoir(img):
 
 	_, feuilleBlanche = cv.threshold(agrandi, 127 ,255,cv.THRESH_BINARY+cv.THRESH_OTSU)
 	masqueFeuilleBlanche = cv.bitwise_not(feuilleBlanche)	#on a que la feuille blanche normalement
+	
+	#y a moyen que les lettres aient étaient sélectionnées comme fond, donc on fait des fermetures 
+	masqueFeuilleBlanche = ouverture(masqueFeuilleBlanche, 9)
+
 	masqueFeuilleBlanche = masqueFeuilleBlanche[300: masqueFeuilleBlanche.shape[0]-300,  300: masqueFeuilleBlanche.shape[1]-300] # on redimensionne bien
 	if masqueFeuilleBlanche.shape[0] != img.shape[0]:
 		print("pas bon")
@@ -97,6 +93,17 @@ def enleveFondNoir(img):
 	return masqueFeuilleBlanche
 	#retourne le masque où y a que la feuille de blanc
 
+
+def ouverture(img, nombreErosion, tailleMatrice=5):
+	for i in range(nombreErosion):
+		img = erosion(img,tailleMatrice)
+	for i in range(nombreErosion-3): # on fait -3 pour pas avoir trop de bordure
+		img = dilatation(img, tailleMatrice) 
+	return img
+
+
+def coucou():
+	print("bon")
 
 
 def dilatation(img, tailleMatrice=5):

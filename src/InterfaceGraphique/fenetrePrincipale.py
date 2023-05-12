@@ -116,7 +116,7 @@ class FenetrePrincipale(ctk.CTk):
 
 		cheminCWD = os.getcwd() # yolo comprend pas les chemins relatifs ...
 
-		model = YOLO(cheminCWD+"/src/pourYOLO/entrainementsYolo/bestUpperSansBordDilate.pt")
+		model = YOLO(cheminCWD+"/src/pourYOLO/entrainementsYolo/bestUpperSansBord.pt")
 
 		imgASegmenter = cv2.imread("images/imageBin.png")
 

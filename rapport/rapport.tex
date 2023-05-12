@@ -44,9 +44,9 @@
 			\paragraph{}
 				La reconnaissance de l'écriture manuscrite consiste à traduire un texte manuscrit en un texte numérique, interprétable par l'ordinateur. Bien que cette application commence à être utilisé dans différents secteurs, 
 				la variation des styles d'écritures manuscrites d'une personne à l'autre et la mauvaise qualité du texte pose des défis importants pour leurs numérisations.% manuscrits en texte numérique.%  convertion en texte numérique.
-\\Les méthodes classiques étudiés auparravant ou présenté dans la littérature, nottemment l'amélioration de la qualité d'images (filtres, etc) ou la reconnaissance des formes complexes, peuvent ne pas répondre à ce type de problématique.
-\\Ainsi dans ce projet, nous allons explorer un autre axe de recherche basé sur les méthodes de réseaux de neuronnes qui on prouvait leur efficacité à reconnaître et classifier les formes les plus complexes.
-\\Cette recherche vas nous permettre de mettre en oeuvre nos compétences en traitement d'image et d'explorer de nouvelle méthodes plus avancé.
+\\Les méthodes classiques étudiées auparavant ou présentées dans la littérature, notamment l'amélioration de la qualité d'images (filtres, etc) ou la reconnaissance des formes complexes, peuvent ne pas répondre à ce type de problématique.
+\\Ainsi dans ce projet, nous allons explorer un autre axe de recherche basée sur les méthodes de réseaux de neuronne qui ont prouvé leur efficacité à reconnaître et classifier les formes les plus complexes.
+\\Cette recherche va nous permettre de mettre en oeuvre nos compétences en traitement d'image et d'explorer de nouvelles méthodes plus avancées.
 
 			% L'essence du problème est qu'un texte dans un document est très diffrent d'une photo du même document. Dans le 1er cas, le format rend le contenu comprehensible par un ordinateur, il peut donc 
 			% chercher un mot dans le texte ou le modifier pour corriger des fautes d'orthographe. Dans le 2e cas, l'image représente la même chose. MAIS, la machine ne comprend le sens de l'information 
@@ -54,24 +54,38 @@
 			% alors que le texte ne change pas.
 			% \\Réussir à lire du texte sur des images permettrait de faciliter la numérisation de document papier. Ainsi, libérer les Humains de quelques tâches redondantes. Lire des formulaires ou encore d'améliorer les moteurs de recherche avec des images qui contient du texte sont des applications possibles.
 		\subsection*{}
-			Ce problème est particulièrement intéressant. En effet, un projet sur le traitement automatique de l'information numérique est exactement ce que des étudiants en informatique devraient faire. Nous avons pu constater une explosion
-			de l'intelligence artificielle ces dernières années. Notamment les réseaux neuronaux. À l'heure actuel, ils sont capables de detecter des objets et de les classifier. Ce projet est tout à fait 
-			intéressant pour de futurs étudiants en master IASD.
+			Le traitement automatique de l'information numérique est particulièrement intéressant pour des étudiants en informatique car il peut être abordé de nombreuses manières. 
+
+			jsp mais faut reformuler
+			% L'utilisation de l'intelligence artificielle et notamment des réseaux de neurones permettrait de reconnaitre facilement les formes
+			% Grâce à la croissance exponentielle de l'intelligence artificielle ces dernières années,
+			% nous pouvons 
+			%  En effet, un projet sur le traitement automatique de l'information numérique est exactement ce que des étudiants en informatique devraient faire. Nous avons pu constater une explosion
+			% de l'intelligence artificielle ces dernières années, notamment les réseaux neuronaux. À l'heure actuelle, ils sont capables de détecter des objets et de les classifier. Ce projet est tout à fait 
+			% intéressant pour de futurs étudiants en master IASD.
 		\subsection{Quelques approches de reconnaissance de formes}
 			\subsubsection{k-Nearest Neighbor}
-				Méthode statistique, il y a un plan avec plein d'objets qui forment des troupeaux, notre lettre est quelque part dans le plan, on trace un cercle autour, notre lettre est identifiée comme l'objet présent au plus grand nombre à l'intérieur du cercle.
+				La méthode du k-Nearest Neighbor se base sur le principe que les échantillons appartenant à la même classe ont tendance à se regrouper dans l'espace des caractéristiques.
+				Pour classifier une nouvelle entrée, on regarde les k points d'entraînement les plus proches. La nouvelle entrée est classée en fonction de la classe majoritaire des voisins
+				% Méthode statistique, il y a un plan avec plein d'objets qui forment des troupeaux, notre lettre est quelque part dans le plan, on trace un cercle autour, notre lettre est identifiée comme l'objet présent au plus grand nombre à l'intérieur du cercle.
 			\subsubsection{Template matching} 
 				% En gros, comparaison de l'image avec la base de donnée entière à l'aide d'une fonction de distance. 
 				\paragraph{}
-					Cette approche est l'une des plus simple. Voici en quoi elle consiste :\\Nous allons partir d'une banque d'image de référence. À chaque fois que nous souhaitons classifier une nouvelle image, nous allons comparé cette nouvelle image avec toute nos images de référence à l'aide d'une simple fonction de distance euclidienne.
-				\paragraph{L'avantage} de cette solution est que nous n'avons pas besoin d'entrainer un modèle au préalable.
-				\paragraph{Le désavantage} est que cette technique est sensible aux rotations et aux déplacements dans l'image.%si la nouvelle image subit une rotation trop grande,
+					Cette approche est l'une des plus simple. Voici en quoi elle consiste :\\Nous allons partir d'une banque d'image de référence. À chaque fois que nous souhaitons classifier une nouvelle image, nous allons comparer cette nouvelle image avec toute nos images de référence à l'aide d'une simple fonction de distance euclidienne.
+				\paragraph{} L'avantage de cette solution est qu'il n'est pas nécessaire d'entrainer un modèle au préalable. Elle est néanmoins sensible aux rotations et aux déplacements dans l'image.%si la nouvelle image subit une rotation trop grande,
 			\subsubsection{Les réseaux de neuronnes} 
-				Les réseaux de neuronnes
-		\subsection{Objectifs}
-			Notre objectif est de proposer une méthode pour convertir une image de texte manuscrit en un texte numérique.\\
-			Dans notre étude nous allons considéré 26 lettres de l'alphabet latin en majuscules et présenter des résultats préliminaires
+				Les réseaux de neuronnes sont souvent utilisés pour résoudre des problèmes de classification et de prédiction.
+				Ils sont constitués de couches de neurones interconnectés en s'inspirant du fonctionnement du cerveau humain.
+				Cette méthode nécessite une phase d'apprentissage qui peut être longue, coûteuse et qui repose sur la qualité et la quantité des données d'entraînement fournies.
+				Nous avons choisi cette solution pour reconnaitre les lettres dans notre projet.
+
 		\subsection{Cahier des charges}
+
+			\subsubsection{Objectifs}
+			Notre objectif est de proposer une méthode pour convertir une image de texte manuscrit en un texte numérique.\\
+			Dans notre étude nous allons considérer les 26 lettres de l'alphabet latin en majuscule et espacées.
+
+
 			\subsubsection{Besoins et contraintes}
 				\paragraph{Les besoins}
 					\subparagraph{Capturer une image}
@@ -79,47 +93,61 @@
 					\subparagraph{Pré-traitement}
 						Le logiciel réduira le bruit et rendra l'image plus nette à l'aide de plusieurs filtres prédéfinis. 
 					\subparagraph{Segmentation de l'image}
-						Les différents charactères présents sur l'image seront localisés à l'aide d'histogramme de projection.
-					\subparagraph{Extraction des charactères}
-						Les charactères seront ensuite découpés pour former leurs propres imagettes .i.e une image qui contient TEST devriendra 4 petites imagettes contenant respectivement T E S T.
+						Les différents caractères présents sur l'image seront localisés à l'aide d'histogramme de projection.
+					\subparagraph{Extraction des caractères}
+						Les caractères seront ensuite découpés pour former leurs propres imagettes i.e. une image qui contient TEST devriendra 4 petites imagettes contenant respectivement T E S T.
 					\subparagraph{Reconnaissance}
 						Les imagettes feront l'objet d'une reconnaissance de façon individuelle. La solution que nous choisissons d'implémenter est un réseau neuronal convolutif.
 					\subparagraph{Présenter}
-						Une fois que les imagettes sont reconnues en charactère. Il est nécessaire de les assembler et d'afficher à l'utilisateur les mots reconnus.
+						Une fois que les imagettes sont reconnues en caractère. Il est nécessaire de les assembler et d'afficher à l'utilisateur les mots reconnus.
 				\paragraph{Les contraintes}
 					Nous nous fixons comme contraintes de ne pas utiliser de services comme Google Collab car Google possède un modèle économique type "Freemium" (initialement gratuit mais avec des fonctinalités payantes). Nous souhaitons créer un logiciel suffisament performant pour qu'il puisse être lancé sur l'une de nos machines personelles. \\De plus, une webcam est nécessaire, ou alors un appareil photo numérique.
 			\subsubsection{Résulats attendus}
 				\paragraph{}
-					Notre programme doit reconnaître des lettres manuscrites sur un fond blanc. Les lettres seront des charactères majuscule non-liées et sans accents ni charactère spécial.
+					Notre programme doit reconnaître des lettres manuscrites sur un fond blanc. Les lettres seront des caractères majuscules non-liés et sans accents ni caractères spécials.
 	\section{Technologies utilisées} 
 		\subsection{Langages et outils}
 			\subsubsection{Python3}
-				Python3 est un langage de programmation interprété, multiparadigme et multiplatformes.Il favorise la programmation impérative structurée, fonctionnelle et orientée objet. Il est doté d'un typage dynamique fort, d'une gestion automatique de la mémoire par ramasse-miettes et d'un système de gestion d'exceptions. (\url{https://fr.wikipedia.org/wiki/Python_(langage)})
+				Python3 est un langage de programmation interprété, multiparadigme et multiplatformes. Il favorise la programmation impérative structurée, fonctionnelle et orientée objet. Il est doté d'un typage dynamique fort, d'une gestion automatique de la mémoire par ramasse-miettes et d'un système de gestion d'exceptions. (\url{https://fr.wikipedia.org/wiki/Python_(langage)})
+				\paragraph{} Nous avons choisi ce langage car il est simple à comprendre et relativement facile à lire. De plus, par sa popularité, de nombreuses bibliothèques implémentent ce dont nous avons besoin. Python étant conçu pour programmer rapidement et efficacement, nous pourrons nous concentrer davantage sur l'implémentation (à redire).
+
 				% Test \cite{textbook}
 				% \cite{web:lang:python}
 			\subsubsection{OpenCV}
 				\begin{wrapfigure}{r}{0.15\textwidth}
 					\includegraphics[width=0.15\textwidth]{OpenCV.png}
 				\end{wrapfigure}
-				Dans ce projet, nous choisissons d'utiliser la librairie open source de vision par ordinateur (Open Computer Vision). Elle contient les fonctionnalités de pré-traitement d'image nécessaire dans ce projet. Nous utiliserons surtout les fonctions de filtrage d'image.
+				OpenCV (Open Computer Vision) est une bibliothèque open source spécialisée dans le traitement d'images en temps réel.
+				Elle est déposée sous licence libre, et sa popularité ainsi que sa simplicité d'utilisation en font un outil adéquat pour notre projet.
+				Parmi ses nombreuses fonctionnalités, nous utiliserons surtout ses fonctions de filtrage et de seuillage.
+				
 				\newline
 			\subsubsection{You Only Look Once}
-				\paragraph{Expliquons (un peu tout petit peu) plus en détail les réseaux de neurones convolutifs}
-					Les réseaux de neurone simulent plus ou moins le fonctionnement de notre cerveau. Parlons d'abord du neurone formel et on va progresser jusqu'aux CNN.
-					\subparagraph{Le neurone} va prendre plusieurs entrées, des nombres, faire une opération avec une fonction d'activation et en sortie retourner le résultat.
-					\subparagraph{Réseau de neurone} L'architecture des réseaux de neurone simple est organisée en couche. La 1er couche qui est l'entrée (censée reprensenter les yeux).
-						La dernière couche représente la sortie, par exemple si le réseau est entrainé pour reconnaitre des chiens, la sortie doit retourner une valeur proche de 1 si c'est un chien et 0 sinon.
-						Entre le début et la fin du réseau, les couches intermédiaires sont connectées vers l'avant et de façon complète. Un neurone est connecté à tous les neurones de la couche précédente et suivante mais pas à ceux de la même couche.
-					\\Le désavantages de cette approche est qu'il est nécessaire de lui donner des "charactéristiques". Pour reconnaitre si cet animal est un chien on ne va pas lui donner l'image directement, on va lui dire en entrée si ça a des poils, la couleur de son pelage, le nombre de pattes, la forme des oreilles.
-					\subparagraph{Les CNN} blablabla
-					\subparagraph{R-CNN}
 				\paragraph{}
-					You Only Look Once (YOLO) est une archicture de Réseau Neuronal Convolutif (CNN) de type "Region based" (R-CNN) qui est capable de localiser des objets dans une image et en même temps, les classifier.
+				You Only Look Once (YOLO) est une archicture de Réseau Neuronal Convolutif (CNN) de type "Region based" (R-CNN) qui est capable de localiser des objets dans une image et, en même temps, de les classifier.
+
+				\paragraph{Les réseaux de neurones}
+					Les réseaux de neurone simulent plus ou moins le fonctionnement du cerveau humain. Ils sont constitués d'une multitude de neurones interconnectés entre eux qui reçoivent et renvoient des informations.
+					\subparagraph{} Un neurone prend plusieurs entrées pondérées, les somme, puis les passe à travers une fonction d'activation pour produire une sortie vers un autre neurone.
+					\subparagraph{} L'architecture des réseaux de neurone simple est organisée en couche. La 1ère couche représente l'entrée et la dernière couche la sortie.
+					Entre le début et la fin du réseau, les couches intermédiaires sont connectées vers l'avant et de façon complète. Un neurone est connecté à tous les neurones de la couche précédente et de la suivante mais pas à ceux de la même couche.
+					L'apprentissage d'un réseau de neurones en couches se fait par rétropropagation, où l'erreur entre la sortie du réseau et la sortie attendue est propagée en arrière dans le réseau, et les poids des connexions entre les neurones sont ajustés pour minimiser cette erreur.
+					Ce processus est répété pour chaque exemple d'entraînement jusqu'à ce que le réseau atteigne un niveau de précision satisfaisant.	
+						
+					\subparagraph{Les Réseaux de Neurones Convolutifs (CNN)} 
+					Contrairement aux réseaux de neurones traditionnels, qui utilisent des connexions denses entre les neurones des couches adjacentes, les CNN utilisent des couches de convolution qui appliquent des filtres pour extraire des caractéristiques importantes de l'image.
+					Cette opération permet d'extraire des motifs et des formes à différentes échelles et positions de l'image.
+					Les couches de sortie du CNN sont des couches denses classiques qui combinent les informations extraites par les couches précédentes pour produire une sortie finale, telle que la classe de l'objet présent dans l'image.
+					\subparagraph{Region Based CNN}
+
+
+					\subparagraph{} YOLO 
+
 		\subsection*{Justification}
 			\subsubsection*{Python3}
-				\paragraph{} En effet, ce langage est simple à comprendre et relativement facile à lire. De plus par ça popularité, de nombreuse librairies implémentes déjà ce dont nous avons besoin. Et si jamais nous rencontrons un problème, d'autres auront probablement déjà résolu le problème.
+				\paragraph{} En effet, ce langage est simple à comprendre et relativement facile à lire. De plus par ça popularité, de nombreuse bibliothèques implémentes déjà ce dont nous avons besoin. Et si jamais nous rencontrons un problème, d'autres auront probablement déjà résolu le problème.
 			\subsubsection*{OpenCV}
-				\paragraph{} Effectivement, cette librairie dispose de nombreuse fonction qui nous sont utiles. De plus, elle est populaire, sous licence libre et développé par Intel.
+				\paragraph{} Effectivement, cette bibliothèque dispose de nombreuse fonction qui nous sont utiles. De plus, elle est populaire, sous licence libre et développé par Intel.
 			\subsubsection*{You Only Look Once}
 				\paragraph{} YOLO est un réseau de neuronne convolutif moderne est performant implément de nombreuses innovation des dernières années.
 	\newpage
@@ -144,14 +172,14 @@
 				L'image résultat est convertie après en image binaire réalisé avec un seuil adapté. Puis, les pixels noirs et blancs ont été inversé pour facilité la segmentation des images.
 				%il est possible qu'il y ait beaucoup de bruit, dans ce cas là, nous pouvons rogner l'image pour enlever des ombres sur les bords, faire des rotations et filtrer pour enlever le bruit comme illustrée sur la figure \ref{fig:modif}
 			\begin{figure}[H]
-				\caption{Fenêtre de l'IHM après présentation des charactères reconnus}
+				\caption{Fenêtre de l'IHM après présentation des caractères reconnus}
 				\includegraphics[width=0.8\textwidth]{recon.png}
 				\centering
 				\label{fig:recon}
 			\end{figure}
 			\paragraph{} Après avoir établi le prétraitement détaillé ci-dessus, on va procéder à la segmentation des caractères.
 			% \paragraph{} La segmentation des caractères 
-			% \paragraph{}Notre programme va segmenter les charactères, en faire des imagettes et donner ces imagettes individuellement à YOLO. Ensuite après cette reconnaissance, l'IHM présente le résultat.
+			% \paragraph{}Notre programme va segmenter les caractères, en faire des imagettes et donner ces imagettes individuellement à YOLO. Ensuite après cette reconnaissance, l'IHM présente le résultat.
 			\paragraph{} Dans un premier temps, une projection horizontale de histogramme de l'image binaire est calculée afin de segmenter les lignes de texte présentes dessus; cette projection de l'histogramme correspond à un vecteur de taille égale à la largeur de l'image et sommant le nombre de pixels noir sur une ligne.% Par la suite, nous avons écrit une fonction pour créer une image pour l'histogramme précédent.
 Les images d'entrée sont ne sont pas toujours parfaite, ce qui provoque l'apparition d'anomalies dans la projection, pouvant ainsi fausser l'analyse de l'image. Face à ce problème, nous avons créé des fonctions permettant de reconnaître et de supprimer ces anomalies que ce soit dans la partie segmentation des lignes ou des caractères.
 Ensuite, après segmentation des lignes et en se basant sur l'analyse de la projection verticale de l'histogramme de celles-ci, nous avions implémenté des fonctions permettant la localisation et la segmentation des caractères présents dans les lignes. 
@@ -313,7 +341,7 @@ Le critère de détection est basé sur la succession de projections nulles et n
 			\paragraph{} Maintenant que nous avons isoler les lignes, nous allons maintenant découper les lettres de chaque lignes en suivant l'algorithme n°\ref{alg:coordcar} page \pageref{alg:coordcar}
 			\paragraph{} Étant donnée que l'image est filtré, en noir et blanc et binairisé, lorsqu'une lettre est présente à un endroit donnée, cela signifie que sur la projection vertical, l'histogramme est supérieur à 0 à cet endroit là. Sinon, il n'y a pas de lettre et l'histogramme est à 0. L'algorithme n°\ref{alg:coordcar} va parcourir totalement l'histogramme de projection et va tenté de dectecter les pics et récupérer l'indice de début et de fin de ces zones qui correspondront à la limite gauche et droit de la lettre sur l'image. Nous pouvons voir le résultats de cette fonction sur la figure \ref{fig:structDonnee} et des histogrammes de projection horizontal dans l'annexe (page \pageref{fig:histoX1}).
 			\begin{figure}
-				\caption{Imagettes des charactères crée à partir de la 1e ligne}
+				\caption{Imagettes des caractères crée à partir de la 1e ligne}
 				\includegraphics[scale=.3]{segmentation_F.png}
 				\centering
 				\includegraphics[scale=.3]{segmentation_O1.png}
@@ -322,7 +350,7 @@ Le critère de détection est basé sur la succession de projections nulles et n
 				\centering
 			\end{figure}
 			\begin{figure}
-				\caption{Imagettes des charactères crée à partir de la 2e ligne}
+				\caption{Imagettes des caractères crée à partir de la 2e ligne}
 				\includegraphics[scale=.3]{segmentation_B.png}
 				\centering
 				\includegraphics[scale=.3]{segmentation_A.png}
@@ -358,7 +386,7 @@ Le critère de détection est basé sur la succession de projections nulles et n
 		\paragraph{}
 			tests
 		\paragraph{}
-			Cependant, certains points laissent à désirer dans notre projet. Malheureusement, une contribution de l'utilisateur est nécessaire. Pour une bonne reconnaissance des charactères, l'utilisateur doit rogner l'image. Il serait plus pratique que le \emph{rognagne soit fait automatiquement}. 
+			Cependant, certains points laissent à désirer dans notre projet. Malheureusement, une contribution de l'utilisateur est nécessaire. Pour une bonne reconnaissance des caractères, l'utilisateur doit rogner l'image. Il serait plus pratique que le \emph{rognagne soit fait automatiquement}. 
 		\paragraph{}
 			Ensuite, au niveau de la \emph{segmentation}, notre algorithme n'est pas capable de séparer des lettre cursives et ignore totalement les espaces.
 		\paragraph{}
