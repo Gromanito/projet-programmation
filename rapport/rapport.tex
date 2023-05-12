@@ -144,9 +144,9 @@
 	\newpage
 	\section{Développements Logiciel : Conception, Modélisation, Implémentation}
 		\begin{figure}[h]
-			\caption{Diagramme de cas d'utilisation}
-			\includegraphics[width=\textwidth]{UseCaseDiagram.png}
 			\centering
+			\includegraphics[width=\textwidth]{UseCaseDiagram.png}
+			\caption{Diagramme de cas d'utilisation}
 			\label{fig:useCaseDiagram}
 		\end{figure}
 
@@ -155,9 +155,9 @@
 			L'IHM nous permet de prendre des photos avec une webcam connectée à l'ordinateur ou choisir à partir d'une fenêtre une image déjà existante. 
 %Diagramme de Cas d'Utilisation à la page \pageref{fig:useCaseDiagram}. 
 			\begin{figure}[H]
-				\caption{Fenêtre de l'IHM où l'on peut rogner, pivoter et filtrer une image}
-				\includegraphics[width=0.8\textwidth]{modif.png}
 				\centering
+				\includegraphics[width=0.8\textwidth]{modif.png}
+				\caption{Fenêtre de l'IHM où l'on peut rogner, pivoter et filtrer une image}
 				\label{fig:modif}
 			\end{figure}
 			\paragraph{}
@@ -165,9 +165,9 @@
 				L'image résultat est convertie après en image binaire réalisé avec un seuil adapté. Puis, les pixels noirs et blancs ont été inversé pour facilité la segmentation des images.
 				%il est possible qu'il y ait beaucoup de bruit, dans ce cas là, nous pouvons rogner l'image pour enlever des ombres sur les bords, faire des rotations et filtrer pour enlever le bruit comme illustrée sur la figure \ref{fig:modif}
 			\begin{figure}[H]
-				\caption{Fenêtre de l'IHM après présentation des caractères reconnus}
-				\includegraphics[width=0.8\textwidth]{recon.png}
 				\centering
+				\includegraphics[width=0.8\textwidth]{recon.png}
+				\caption{Fenêtre de l'IHM après présentation des caractères reconnus}
 				\label{fig:recon}
 			\end{figure}
 
@@ -186,7 +186,7 @@
 				Le seuillage global est une méthode simple qui offre une binarisation sans bruit et qui suffit lorsque l'acquisition est de bonne qualité. (mettre les images)
 				
 				
-				\begin{figure}
+				\begin{figure}[h]
 					\centering
 					\begin{minipage}{.5\textwidth}
 					  \centering
@@ -207,7 +207,7 @@
 				
 
 
-				\begin{figure}
+				\begin{figure}[h]
 					\centering
 					\begin{minipage}{.5\textwidth}
 					  \centering
@@ -231,7 +231,7 @@
 				Cela est particulièrement efficace pour exposer les lignes et les contours de l'image, et donc pour exhiber les lettres manuscrites. 
 				Il faut noter cependant que la binarisation produite contient du bruit “poivre et sel” (des valeurs anormalement basses ou haute à certains endroits). Pour pallier ce problème, nous appliquons au préalable un filtre médian sur l'image en niveau de gris.
 				
-				\begin{figure}
+				\begin{figure}[h]
 					\centering
 					\begin{minipage}{.5\textwidth}
 					  \centering
@@ -264,7 +264,7 @@
 				Il se peut que le seuillage identifie les lettres comme élément du second plan. Dans ce cas, nous effectuons une fermeture (une dilatation suivie d'une érosion) sur l'image seuillée.
 				
 
-				\begin{figure}
+				\begin{figure}[h]
 					\centering
 					\begin{minipage}{.5\textwidth}
 					  \centering
@@ -281,7 +281,7 @@
 				\end{figure}
 
 
-				\begin{figure}[H]
+				\begin{figure}[h]
 					\centering
 					\includegraphics[width=0.4\textwidth]{apresFermeture.png}
 					\caption{apres la fermeture}
@@ -292,7 +292,7 @@
 
 
 
-				\begin{figure}[H]
+				\begin{figure}[h]
 					\centering
 					\begin{minipage}{.5\textwidth}
 					  \centering
@@ -320,26 +320,63 @@
 				\paragraph{} Une fois l'image binarisée, il faut maintenant séparer chaque caractère présent dans l'image.
 				
 				\paragraph{} Dans un premier temps, une projection horizontale de histogramme de l'image binaire est calculée afin de segmenter les lignes de texte présentes dessus; 
-				\paragraph{} cette projection de l'histogramme correspond à un vecteur de taille égale à la largeur de l'image et sommant le nombre de pixels noirs sur une ligne.% Par la suite, nous avons écrit une fonction pour créer une image pour l'histogramme précédent.
+				\paragraph{} cette projection de l'histogramme correspond à un vecteur de taille égale à la largeur de l'image et sommant le nombre de pixels noirs sur une ligne. % Par la suite, nous avons écrit une fonction pour créer une image pour l'histogramme précédent.
 				Les images d'entrée ne sont pas toujours parfaites, ce qui provoque l'apparition d'anomalies dans la projection, pouvant ainsi fausser l'analyse de l'image. Face à ce problème, nous avons créé des fonctions permettant de reconnaître et de supprimer ces anomalies que ce soit pour la segmentation des lignes ou des caractères.
-				Après la segmentation des lignes et en se basant sur l'analyse de la projection verticale de l'histogramme de celles-ci, nous avons implémenter des fonctions permettant la localisation et la segmentation des caractères présents dans les lignes. 
+				Après la segmentation des lignes et en se basant sur l'analyse de la projection verticale de l'histogramme de celles-ci, nous avons implémenté des fonctions permettant la localisation et la segmentation des caractères présents dans les lignes. 
 				Le critère de détection est basé sur la succession de projections nulles et non nulles. En sortie, nous optenons l'image de chaque caractère et de chaque ligne.
 				(faudrait dire "voir algo en référençant la bonne page)
 			% relire et reformuler
 			
 			% \paragraph{}Il est possible de voir les imagettes générées dans le dossier "./images/imageSegmentee"
 		
-		\subsection{Statistiques}
+		
+
+
+		\subsection{Entrainement de YOLO}
+
+			\paragraph{} Pour prédire et classer au mieux les caractères segmentés produits, les réseaux de neurones ont besoin d'une première phase d'entrainement à partir d'un grand nombre de données.
+			Concernant les images d'entrainement, nous avons choisi la base de données d'images d'écriture manuscrite développée par le National Institute of Standards and Technology (NIST).
+			Cette base de données contient des images de caractères manuscrits et de formulaires remplis à la main, qui ont été collectées pour soutenir la recherche en reconnaissance d'écriture manuscrite.
+			
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=0.6\textwidth]{lettreABDD.png}
+				\caption{Un exemple pour la lettre A}
+				\label{fig:BDDNIST}
+			\end{figure}
+		
+			\paragraph{} Cette banque d'image contient en tout 800 000 caractères, écrits par 3600 personnes différentes. Avant d'entrainer notre réseau de neurones,
+			il faut conformer ces images aux images produite par notre segmentation. Nous avons donc enlever les bords blancs de chaque image de la banque d'image et redimensionner en 128x128.
+
+
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=0.6\textwidth]{lettreASansBordBDD.png}
+				\caption{lettre A après découpage et redimension}
+				\label{fig:BDDNISTsansBord}
+			\end{figure}
+
+			\paragraph{} Une fois le set de données préparé, nous pouvons passer à l'apprentissage.
+			Nous pouvons paramétrer l'entraînement dans YOLO à l'aide des "hyperparamètres", qui ne sont pas des paramètres appris à partir des données, mais plutôt définis par l'utilisateur avant l'entraînement du réseau. Ils contrôlent divers aspects de l'apprentissage et peuvent affecter considérablement les performances du réseau.
+			Il est important de modifier et de tester des paramètres différents lorsque les résultats ne sont pas suffisament acceptables.
+			Etant donné que nos images sont assez petites et binarisées et que nos objets sont assez faciles à reconnaitre, les paramètres par défaut de YOLO nous suffisent à avoir des résultats convenables.
+
+
+
+			\subsection{Statistiques}
 			\begin{itemize}
 				\item[•] Nombres de lignes de code : 
 				\item[•] Nombres de script
 			\end{itemize}
-		\subsection{Entrainement de YOLO}
-			TBD
+	
+	\newpage
+
+	
 	\section{Algorithmes et Analyse}
 		% \subsection{YOLO}
 		\subsection{Segmentation par histogramme de projection}
 			\begin{algorithm}
+
 				\SetKwInput{Strat}{Stratégie}
 				\LinesNumbered
 				\caption{SEGMENTATION(image)}\label{alg:segmentation}
@@ -457,15 +494,15 @@
 				\KwRet{lettres}
 			\end{algorithm}
 			\begin{figure}
+				\includegraphics[width=.75\textwidth]{segmentation_image_originel.png}
 				\caption{Exemple d'une image après filtrage}
-				\includegraphics[width=\textwidth]{segmentation_image_originel.png}
 				\centering
 				\label{fig:imageOriginel}
 			\end{figure}
 			\paragraph{} Sur la figure \ref{fig:imageOriginel}, nous voyons une image de bonne qualité prête à être segmenter par l'algorithme n°\ref{alg:segmentation} (page \pageref{alg:segmentation}). 
 			\begin{figure}
-				\caption{Images de nos 3 lignes crée à partir de l'image de départ}
 				\includegraphics[width=.8\textwidth]{segmentation_ligne1.png}
+				\caption{Images de nos 2 lignes créées à partir de l'image de départ}
 				\centering
 				\includegraphics[width=.8\textwidth]{segmentation_ligne2.png}
 				\centering
@@ -473,8 +510,8 @@
 			\end{figure}
 			% \paragraph{} On voit sur la figure \ref{fig:imageLignes} à la page \pageref{fig:imageLignes} que dû à un filtrage de bonne qualité, nous obtenons exactement 2 lignes comme attendus. 
 			\begin{wrapfigure}{r}{0.35\textwidth}
-					\caption{Structure de données dans l'algorithme SEGMENTATION}
-					\includegraphics[width=0.35\textwidth]{structDonnee.png}
+				\includegraphics[width=0.35\textwidth]{structDonnee.png}
+				\caption{Structure de données dans l'algorithme SEGMENTATION}
 					\label{fig:structDonnee}
 			\end{wrapfigure}
 			\paragraph{} Grâce à une projection vertical, nous obtenons ce tableau (voir figure \ref{fig:structDonnee}). La 1er ligne de ce tableau contient autant de tuples que le nombre de lignes. Chaque tuples contient la composante en ordonnée du début et de la fin d'une ligne. En choississant arbitrairement comme largeur d'une ligne, la largeur de l'image, on extrait nos 2 lignes comme sur la figure \ref{fig:imageLignes}.
@@ -501,7 +538,7 @@
 	\newpage
 	\section{Analyse des Résulats}
 		\subsection{Mesure expérimental de YOLO}
-			Nous procédure de test est la suivante : Écrire des lettres de moins en moins bien, ???, YOLO, grah
+			\paragraph{} Pour mesurer le taux de prédiction correcte de YOLO, nous avons écrit des lettres de différentes manières et nous avons observer le taux de réussite
 			\begin{figure}[H]
 				\caption{}
 				\includegraphics[width=\textwidth]{grapYoloReussite.png}
@@ -514,6 +551,42 @@
 				\centering
 				\label{fig:graph:confiance}
 			\end{figure}
+			\paragraph{} YOLO est en général très confiant et arrive dans la plupart des cas à reconnaitre la bonne lettre (dans de bonnes conditions).
+		
+			\paragraph{} Nous avons utilisé des pangrammes (phrases contenant toutes les lettres de l'alphabet) pour tester notre logiciel.
+			
+			\begin{center}
+				\includegraphics[width=.45\textwidth]{portezCeWhisky.png}
+				\includegraphics[width=.45\textwidth]{theBrownFox.png}
+				\includegraphics[width=.45\textwidth]{portezCeWhiskyLabel.png}
+				\includegraphics[width=.45\textwidth]{theBrownFoxLabel.png}
+				\caption{ Pangrammes français et anglais}
+			\end{center}
+			\newline
+			\newline
+			\paragraph{} En pratique toutes les lettres sont bien reconnues. En revanche, des caractères mal écrits ou une image issue d'une binarisation médiocre rendent difficile la reconnaissance par YOLO.
+			
+			% \begin{figure}[H]
+			% 	\centering
+			% 	\includegraphics[width=0.6\textwidth]{bienMalEcrit.png}
+			% 	\label{fig:bienMalEcrit}
+			% \end{figure}
+
+			\begin{center}
+				\includegraphics[width=.4\textwidth]{bienEcritMalEcrit.png}
+				\includegraphics[width=.4\textwidth]{bienEcritMalEcritLabel.png}
+			\end{center}
+
+
+			\paragraph{} Grâce aux bonnes performances de YOLO, la reconnaissance d'un caractère est de l'ordre de la milliseconde. La reconnaissance se fait donc instantanément.
+
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=0.95\textwidth]{speedYOLO.png}
+				\caption{}
+				\label{fig:speedYOLO}
+			\end{figure}
+
 	\section{Gestion du Projet}
 		\paragraph{} Pendant ce projet, nous avons due communiquer et collaborer ensembles afin d'atteindre not but commun. Voici les outils que nous avons utilisé.
 		\paragraph{} Premierement, pour communiquer nous avons utiliser l'application Discord. Sur lequel nous avons un groupe où nous nous envoyons des messages, des images et des fichiers.
